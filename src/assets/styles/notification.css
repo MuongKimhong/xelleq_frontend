@@ -1,0 +1,35 @@
+.post-notification-container {
+    padding-bottom: 10px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    will-change: transform;
+    flex: 1;
+}
+
+.post-notification-item {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: start;
+    cursor: pointer;
+    padding: 10px;
+}
+.post-notification-item-not-seen {
+    background-color: rgba(128, 129, 128, 0.2);
+}
+.post-notification-item:hover {
+    background-color: rgba(128, 129, 128, 0.3);
+}
+
+.post-notification-comment-text {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}

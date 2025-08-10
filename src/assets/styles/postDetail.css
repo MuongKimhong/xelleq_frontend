@@ -1,0 +1,60 @@
+.comment-container {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+  margin-bottom: 5px;
+}
+.comment-container:hover {
+    background-color: rgba(128, 128, 128, 0.08);
+}
+.comment-header {
+  display: flex;
+  align-items: flex-start;
+}
+.profile-img {
+  border-radius: 50%;
+  cursor: pointer;
+}
+.comment-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 10px;
+  font-size: 14px;
+  width: 100%;
+}
+.meta-left {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.username {
+  font-weight: 600;
+  cursor: pointer;
+}
+.username:hover {
+    color: #2080f0;
+}
+.post-owner-username {
+    cursor: pointer;
+}
+.post-owner-username:hover {
+    color: #2080f0;
+}
+.dot {
+  margin: 0 6px;
+  font-size: 12px;
+}
+.timestamp {
+  font-size: 12px;
+}
+.comment-body {
+  padding-left: 35px;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  margin-top: 5px;
+}

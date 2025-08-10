@@ -1,0 +1,73 @@
+
+.tab-content {
+  height: calc(100vh - 125px);
+  overflow-y: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.upper-detail-container {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.name-detail-container {
+  margin-left: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.description {
+  white-space: pre-line;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  background-color: green;
+}
+.tabs-container {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.tab-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  background-color: green;
+}
+.forum-tab-content-container {
+    scroll-behavior: smooth;
+    will-change: transform;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 0px 5px;
+}
+.storage-tab-container {
+    padding: 0px 5px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    will-change: transform;
+}
+.settings-tab-container {
+    padding: 0px 5px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    will-change: transform;
+}
+.members-tab-container {
+    padding: 0px 5px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    will-change: transform;
+}
+.approval-tab-container {
+    padding: 0px 5px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    will-change: transform;
+}

@@ -1,0 +1,103 @@
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow:
+    0 2px 6px 0 rgba(0, 0, 0, 0.2),
+    0 4px 18px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 0px;
+  height: 60px;
+}
+
+.navbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-left,
+.navbar-right,
+.navbar-center {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space between items */
+}
+
+.navbar-left {
+  cursor: pointer;
+}
+
+.navbar-center {
+  flex: 1;
+  justify-content: center;
+}
+
+#celliq-name {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  /* xs */
+  .search-input {
+    max-width: 300px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+@media (min-width: 640px) {
+  /* sm */
+  .search-input {
+    max-width: 350px;
+  }
+}
+
+@media (min-width: 768px) {
+  /* md */
+  .search-input {
+    max-width: 450px;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* lg */
+  .search-input {
+    max-width: 500px;
+  }
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  gap: 12px;
+}
+
+.settings-row-clickable {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.settings-row-clickable:hover {
+  background-color: rgba(128, 128, 128, 0.5);
+}

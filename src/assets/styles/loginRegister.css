@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+#login-card {
+  width: 400px;
+}
+#register-card {
+  width: 400px;
+}
+.input {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.input-text {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.link-span {
+  color: royalblue;
+  cursor: pointer;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

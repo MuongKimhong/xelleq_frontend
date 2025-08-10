@@ -1,0 +1,8 @@
+.profile-container  {
+    scroll-behavior: smooth;
+    will-change: transform;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 0px 5px;
+}

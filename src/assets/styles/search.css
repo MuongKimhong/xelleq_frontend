@@ -1,0 +1,103 @@
+.search-history-suggestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 5px;
+  border-radius: 5px;
+}
+.search-history-suggestion:hover {
+  background-color: rgba(128, 128, 128, 0.3);
+}
+
+.search-history-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    padding: 8px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 4px;
+    box-sizing: border-box;
+    z-index: 1000;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.search-input-wrapper {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    height: 40px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* post results */
+.search-result-posts-container  {
+    scroll-behavior: smooth;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 0px 5px;
+}
+.upper-detail-container {
+  display: flex;
+  align-items: center;
+}
+.name-detail-container {
+  margin-left: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.post-result-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0px 10px;
+  gap: 5px;
+}
+.post-result-wrapper {
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 8px;
+}
+.post-result-wrapper:hover {
+  background-color: rgba(128, 128, 128, 0.3);
+}
+.post-media-wrapper {
+  width: 100px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+}
+/* end post results */
+
+/* search results */
+.search-result-server-container  {
+    scroll-behavior: smooth;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 0px 5px;
+}
+.server-result-wrapper {
+  padding-bottom: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 8px;
+}
+.server-result-wrapper:hover {
+  background-color: rgba(128, 128, 128, 0.3);
+}
+/* end search result */
