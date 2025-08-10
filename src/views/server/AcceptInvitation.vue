@@ -23,10 +23,10 @@ const errText = ref('')
 const showSuccessText = ref(false)
 const successText = ref(t('invitationAccept'))
 
-function redirectServer(serverId) {
+function redirectServer(resData) {
   const url = new URL(window.location.href)
   const origin = url.origin
-  window.location.href = `${origin}/server/${serverId}`
+  window.location.href = `${origin}/server/${resData.server_slug}/${resData.server_id}`
 }
 
 async function acceptInvitation() {
@@ -53,14 +53,12 @@ async function acceptInvitation() {
 
     if (res.status === 200) {
       showSuccessText.value = true
-      setTimeout(() => redirectServer(server), 2000)
+      setTimeout(() => redirectServer(res.data), 2000)
     }
   } catch (err) {
     let errRes = err.response.data.error
 
     switch (errRes) {
-      case 'User is already a member':
-        redirectServer(server)
       case 'Fail to join server':
         errText.value = t('invitationAcceptFail')
         break
@@ -74,7 +72,9 @@ async function acceptInvitation() {
 }
 
 onMounted(async () => {
-  await acceptInvitation()
+  try {
+    await acceptInvitation()
+  } catch (_) {}
 })
 </script>
 
