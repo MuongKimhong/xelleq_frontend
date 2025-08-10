@@ -11,6 +11,9 @@ import EditPost from "@/views/server/EditPost.vue"
 import PostDetail from '@/views/server/PostDetail.vue'
 import UserProfile from "@/views/auth/UserProfile.vue"
 import SearchView from "@/views/SearchView.vue"
+import LogInView from "@/views/auth/LogInView.vue"
+import RegisterView from "@/views/auth/RegisterView.vue"
+import AccountSettings from "@/views/auth/AccountSettings.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,7 +30,7 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/auth/LogInView.vue'),
+      component: LogInView,
       meta: {
         title: 'Login - Xelleq',
         description: 'Log into Xelleq'
@@ -36,7 +39,7 @@ const router = createRouter({
     {
       path: '/register',
       name: 'register',
-      component: () => import('../views/auth/RegisterView.vue'),
+      component: RegisterView,
       meta: {
         title: 'Register Account - Xelleq',
         description: "Register new xelleq account"
@@ -54,7 +57,7 @@ const router = createRouter({
     {
       path: '/account-settings',
       name: 'account-settings',
-      component: () => import('../views/auth/AccountSettings.vue'),
+      component: AccountSettings,
       meta: {
         title: 'Account settings - Xelleq',
         description: "Account settings"
