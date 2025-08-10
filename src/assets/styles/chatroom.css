@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 200px;
-  height: calc(100vh - 125px);
+  height: calc(100dvh - 125px);
   border-right: 0.5px solid rgba(128, 128, 128, 0.2);
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - 125px);
+  height: calc(100dvh - 125px);
   overflow-y: auto;
   scroll-behavior: smooth;
   will-change: transform;

@@ -221,8 +221,8 @@ onBeforeUnmount(() => {
   <div
     style="
       width: 100%;
-      min-height: calc(100vh - 60px);
-      height: calc(100vh - 60px);
+      min-height: calc(100dvh - 60px);
+      height: calc(100dvh - 60px);
       box-sizing: border-box;
       overflow-y: hidden;
       overflow-x: hidden;
@@ -260,7 +260,7 @@ onBeforeUnmount(() => {
           searchResultPostsWithMedia.length > 0)
       "
       class="mt-4"
-      style="overflow-y: hidden; height: calc(100vh - 60px)"
+      style="overflow-y: hidden; height: calc(100dvh - 60px)"
     >
       <n-tabs
         v-model:value="activeTab"

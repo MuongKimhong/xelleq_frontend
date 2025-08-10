@@ -60,7 +60,7 @@ function redirectServer(server) {
 <template>
   <div
     style="
-      height: calc(100vh - 135px);
+      height: calc(100dvh - 135px);
       overflow-y: hidden;
       display: flex;
       flex-direction: column;

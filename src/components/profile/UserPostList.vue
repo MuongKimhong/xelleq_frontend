@@ -107,7 +107,7 @@ function onPostUnsavedSuccess(index) {
   <div
     class="mt-2"
     style="
-      height: calc(100vh - 160px);
+      height: calc(100dvh - 160px);
       overflow-y: hidden;
       min-height: 0;
       display: flex;

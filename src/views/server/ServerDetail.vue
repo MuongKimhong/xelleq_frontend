@@ -191,7 +191,7 @@ onBeforeUnmount(() => {
   <div
     v-if="serverPageKey && serverData"
     :key="serverPageKey"
-    style="display: flex; flex-direction: column; height: calc(100vh - 60px)"
+    style="display: flex; flex-direction: column; height: calc(100dvh - 60px)"
   >
     <div>
       <div class="upper-detail-container" style="height: 30px">

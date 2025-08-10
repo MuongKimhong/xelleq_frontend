@@ -140,7 +140,7 @@ function onPostUnsavedSuccess(index) {
 </script>
 
 <template>
-  <div style="overflow-y: hidden; height: calc(100vh - 60px)">
+  <div style="overflow-y: hidden; height: calc(100dvh - 60px)">
     <div v-if="loadErr" style="text-align: center" class="mt-4">
       <n-tag type="error">Someting went wrong, please try again!</n-tag>
     </div>
@@ -201,13 +201,13 @@ function onPostUnsavedSuccess(index) {
 <style scoped>
 .newfeed-container {
   padding: 0px 5px;
-  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
   /* overflow-y: auto;
   scroll-behavior: smooth;
   will-change: transform; */
 }
 .new-feed-content-container {
-  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
   scroll-behavior: smooth;
   will-change: transform;
   flex: 1;

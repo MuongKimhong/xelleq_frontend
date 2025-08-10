@@ -57,7 +57,7 @@ const themeOverrides = {
       <Navbar />
 
       <!-- 60px is navbar width to avoid unwanted overflow -->
-      <n-layout has-sider style="height: calc(100vh - 60px); overflow: hidden">
+      <n-layout has-sider style="height: calc(100dvh - 60px); overflow: hidden">
         <Sider v-if="isBreakPointMdAndUp" />
 
         <n-layout>

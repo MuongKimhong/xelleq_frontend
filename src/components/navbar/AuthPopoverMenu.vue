@@ -58,7 +58,10 @@ async function logout() {
   userStore.clearUser()
 
   // ok or error, refresh page anyway
-  await api.post('/users/log-out')
+
+  try {
+    await api.post('/users/log-out')
+  } catch (_) {}
   window.location.href = '/'
 }
 

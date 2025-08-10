@@ -258,7 +258,7 @@ onBeforeUnmount(() => {
 <template>
   <div
     style="
-      height: calc(100vh - 60px);
+      height: calc(100dvh - 60px);
       overflow-y: auto;
       scroll-behavior: smooth;
       will-change: transform;

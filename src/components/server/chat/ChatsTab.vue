@@ -75,7 +75,7 @@ function onGoBackRoomList() {
 <template>
   <div
     v-if="serverData.isMember"
-    style="height: calc(100vh - 125px); overflow-y: hidden; min-height: 0"
+    style="height: calc(100dvh - 125px); overflow-y: hidden; min-height: 0"
   >
     <div
       :class="{

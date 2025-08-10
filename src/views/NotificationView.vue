@@ -25,7 +25,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    style="height: calc(100vh - 60px); overflow-y: hidden; display: flex; flex-direction: column"
+    style="height: calc(100dvh - 60px); overflow-y: hidden; display: flex; flex-direction: column"
   >
     <div style="padding: 0px 10px">
       <h2 class="margin: 0;">Notifications</h2>
