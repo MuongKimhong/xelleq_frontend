@@ -159,6 +159,7 @@ export const useUserWS = defineStore('userWSStore', () => {
     userWS,
     connect,
     disconnect,
-    handleMessageType
+    handleMessageType,
+    updateOnVoiceCallFlag
   }
 })

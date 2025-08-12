@@ -17,6 +17,7 @@ import { useChatStore, useVoiceCallStore } from '@/stores/chat.js'
 import { useServerStore } from '@/stores/server.js'
 import { useBreakpoint } from '@/breakpoint.js'
 import { useUserStore } from '@/stores/user.js'
+import { userWSStore } from '@/stores/websocket/user.js'
 import { storeToRefs } from 'pinia'
 import api from '@/axios.js'
 
@@ -40,6 +41,8 @@ const emit = defineEmits(['go-back-to-room-list'])
 const { isBreakPointMdAndDown } = useBreakpoint()
 
 const messageArea = useTemplateRef('messageArea')
+
+const userWS = userWSStore()
 
 const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
@@ -349,6 +352,7 @@ async function joinCall(channel) {
         res.data['uid'],
       )
       await voiceCallStore.setupCallProcess(channel)
+      userWS.updateOnVoiceCallFlag(true, res.data)
     }
   } catch (_) {}
 
