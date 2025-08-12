@@ -5,7 +5,6 @@ import { useRoute } from 'vue-router'
 import { useBreakpoint } from './breakpoint'
 import { useThemeStore } from './stores/theme'
 import { useUserStore } from './stores/user.js'
-import { useUserWS } from './stores/websocket/user.js'
 import { useLangStore } from './stores/lang'
 import { storeToRefs } from 'pinia'
 import { ref, computed, onMounted } from 'vue'
@@ -16,7 +15,7 @@ import Sider from './components/Sider.vue'
 const { isBreakPointMdAndUp } = useBreakpoint()
 const route = useRoute()
 const themeStore = useThemeStore()
-const theme = computed(() => themeStore.theme)
+const { theme } = storeToRefs(themeStore)
 
 const langStore = useLangStore()
 const naiveLang = computed(() => langStore.naiveUIlang)
@@ -35,6 +34,8 @@ const routeComponentKey = computed(() => {
   }
   return name
 })
+
+themeStore.restoreTheme()
 
 const themeOverrides = {
   common: {

@@ -2,7 +2,6 @@
 import { NSkeleton, NImage, NSpin, NButton, NTag, NModal, NTabs, NTab, useMessage } from 'naive-ui'
 import { useServerStore, useViewingServerStore, useNeedJoinServerStore } from '@/stores/server.js'
 import { useServerGeneralWS } from '@/stores/websocket/server_general.js'
-import { useSiderStore } from '@/stores/sider.js'
 import { useBaseStore } from '@/stores/base.js'
 import { useUserStore } from '@/stores/user.js'
 import { useChatWS } from '@/stores/websocket/chatroom.js'
@@ -35,9 +34,6 @@ const message = useMessage()
 const serverGeneralWSStore = useServerGeneralWS()
 const { serverGeneralWS } = storeToRefs(serverGeneralWSStore)
 
-const siderStore = useSiderStore()
-const { collapsed } = storeToRefs(siderStore)
-
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
@@ -53,13 +49,6 @@ const { viewingServer } = storeToRefs(viewingServerStore)
 
 const needJoinServerStore = useNeedJoinServerStore()
 const { needToJoinServerId } = storeToRefs(needJoinServerStore)
-
-const activeTab = ref('')
-watch(activeTab, (newActiveTab, oldActiveTab) => {
-  if (newActiveTab === 'chat') {
-    collapsed.value = true
-  }
-})
 
 const isJoiningServer = ref(false)
 async function joinPublicServer() {
@@ -156,6 +145,8 @@ function cleanUp() {
   serverPageKey.value = null
 }
 
+const activeTab = ref('')
+
 onMounted(async () => {
   await getServerData()
   serverPageKey.value = `server-${route.params.slug}`
@@ -179,6 +170,36 @@ onMounted(async () => {
       }
     }
   }
+
+  if (serverData.value) {
+    if (serverData.value.description && (serverData.value.isMember || serverData.value.public)) {
+      activeTab.value = 'description'
+    } else if (serverData.value.isMember) {
+      activeTab.value = 'chat'
+    }
+
+    if (route.query.tab) {
+      activeTab.value = route.query.tab
+    } else {
+      // If no tab in query set default
+      router.replace({
+        query: {
+          ...route.query,
+          tab: activeTab.value,
+        },
+      })
+    }
+  }
+})
+
+// When activeTab change update query param
+watch(activeTab, (newTab) => {
+  router.replace({
+    query: {
+      ...route.query,
+      tab: newTab,
+    },
+  })
 })
 
 onBeforeUnmount(() => {
