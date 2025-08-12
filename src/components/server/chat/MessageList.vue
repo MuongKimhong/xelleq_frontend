@@ -180,8 +180,8 @@ onBeforeUnmount(() => {
   removeScrollListener()
 })
 
-function onNewMessageSent(newMsg) {
-  messages.value.push(newMsg)
+function onNewMessageSent() {
+  // messages.value.push(newMsg)
   setTimeout(() => {
     if (messageArea.value) {
       messageArea.value.scrollTop = 0

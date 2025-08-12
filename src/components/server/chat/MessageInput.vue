@@ -205,7 +205,8 @@ async function sendMessage() {
 
     if (res.status === 200) {
       message.value = ''
-      emit('new-msg-sent', res.data['new_msg'])
+      // emit('new-msg-sent', res.data['new_msg'])
+      emit('new-msg-sent')
       emit('close-reply-to')
 
       selectedVideo.value = null

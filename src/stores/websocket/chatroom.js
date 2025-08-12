@@ -58,35 +58,32 @@ export const useChatWS = defineStore('chatWS', () => {
         break
 
       case "NewMessage":
-        let newMsgRoomId = data["new_msg"]["room_id"]
+        let newMsgRoomId = data["room_id"]
 
-        if (openingRoomId.value) {
-          if (openingRoomId.value === newMsgRoomId) {
-            messages.value.push(data["new_msg"])
-
-            if (user.value.id !== data["new_msg"]["sender_id"]) {
-              setTimeout(() => {
-                api.post("/message/mark-message-seen", {
-                  room_id: openingRoomId.value,
-                  server_id: serverData.value.id,
-                  message_id: data["new_msg"]['id']
-                })
-              }, 1000)
-            }
-          }
-        }
-
-        if (
-          (openingRoomId.value && (openingRoomId.value !== newMsgRoomId)) ||
-          (openingRoomId.value === null)
-        ) {
-          let index = rooms.value.findIndex((r) => r.id === data["new_msg"]['room_id'])
+        if ((openingRoomId.value !== newMsgRoomId) || !openingRoomId.value)
+        {
+          let index = rooms.value.findIndex((r) => r.id === newMsgRoomId)
 
           if (index !== -1) {
             rooms.value[index]['has_msg_to_be_seen'] = true
           }
         }
 
+        if (openingRoomId.value === newMsgRoomId) {
+          if (user.value.id === data['sender_id']) {
+            messages.value.push(data['new_msg_self'])
+          } else {
+            messages.value.push(data['new_msg_other'])
+
+            setTimeout(() => {
+              api.post("/message/mark-message-seen", {
+                room_id: openingRoomId.value,
+                server_id: serverData.value.id,
+                message_id: data["new_msg_other"]['id']
+              })
+            }, 1000)
+          }
+        }
         break
 
       case "DeleteMessage":
