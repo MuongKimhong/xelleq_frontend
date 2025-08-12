@@ -351,8 +351,8 @@ async function joinCall(channel) {
         res.data['token'],
         res.data['uid'],
       )
-      await voiceCallStore.setupCallProcess(channel)
       userWS.updateOnVoiceCallFlag(true, res.data)
+      await voiceCallStore.setupCallProcess(channel)
     }
   } catch (_) {}
 
