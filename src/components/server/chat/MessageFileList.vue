@@ -54,7 +54,8 @@ function getGridCols(count) {
       <div v-else>
         <n-image
           :src="message.file_data[0].url"
-          style="max-width: 450px; max-height: 400px"
+          width="100%"
+          style="max-width: 400px; max-height: 400px"
         ></n-image>
       </div>
     </div>
