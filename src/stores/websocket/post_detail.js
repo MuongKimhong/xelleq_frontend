@@ -8,6 +8,8 @@ import { useStorageStore } from '../storage.js'
 import api from '../../axios.js'
 
 export const useUpdatePostDetailWS = defineStore('updatePostDetailWS', () => {
+  const interval = ref(null)
+
   const postDetailStore = usePostDetailStore()
   const { postData } = storeToRefs(postDetailStore)
 
@@ -17,12 +19,32 @@ export const useUpdatePostDetailWS = defineStore('updatePostDetailWS', () => {
     let path = `/forum/update-post-detail-data/${postId}`
     let url = api.defaults.baseURL.replace(/^http/, 'ws') + path
     updatePostDetailWS.value = new WebSocket(url)
+
+    updatePostDetailWS.value.onopen = () => {
+      // ping every 30 seconds to keep connection alive
+      interval.value = setInterval(() => {
+        if (updatePostDetailWS.value && updatePostDetailWS.value.readyState === WebSocket.OPEN) {
+          updatePostDetailWS.value.send(JSON.stringify({ type: "ping" }));
+        }
+      }, 30 * 1000);
+    };
+
+    updatePostDetailWS.value.onclose = () => {
+      if (interval.value) {
+        clearInterval(interval.value);
+        interval.value = null
+      }
+    };
   }
 
   function disconnect() {
     if (updatePostDetailWS.value) {
       updatePostDetailWS.value.close()
       updatePostDetailWS.value = null
+    }
+    if (interval.value) {
+      clearInterval(interval.value);
+      interval.value = null
     }
   }
 

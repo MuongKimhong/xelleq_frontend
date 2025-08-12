@@ -12,6 +12,7 @@ import api from "@/axios.js"
 
 export const useUserWS = defineStore('userWSStore', () => {
   const route = useRoute()
+  const interval = ref(null)
 
   const serverStore = useServerStore()
   const { serverData, joinedServers } = storeToRefs(serverStore)
@@ -34,6 +35,22 @@ export const useUserWS = defineStore('userWSStore', () => {
       let path = `/users/user-websocket/${user.value.id}`
       let url = api.defaults.baseURL.replace(/^http/, 'ws') + path
       userWS.value = new WebSocket(url)
+
+      userWS.value.onopen = () => {
+        // ping every 30 seconds to keep connection alive
+        interval.value = setInterval(() => {
+          if (userWS.value && userWS.value.readyState === WebSocket.OPEN) {
+            userWS.value.send(JSON.stringify({ type: "ping" }));
+          }
+        }, 30 * 1000);
+      };
+
+      userWS.value.onclose = () => {
+        if (interval.value) {
+          clearInterval(interval.value);
+          interval.value = null
+        }
+      };
     }
   }
 
@@ -41,6 +58,10 @@ export const useUserWS = defineStore('userWSStore', () => {
     if (userWS.value) {
       userWS.value.close()
       userWS.value = null
+    }
+    if (interval.value) {
+      clearInterval(interval.value);
+      interval.value = null
     }
   }
 

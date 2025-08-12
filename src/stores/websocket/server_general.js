@@ -8,6 +8,7 @@ import { useStorageStore } from '../storage.js'
 import api from '../../axios.js'
 
 export const useServerGeneralWS = defineStore('serverGeneralWS', () => {
+  const interval = ref(null)
   const serverStore = useServerStore()
   const { serverData } = storeToRefs(serverStore)
 
@@ -23,12 +24,32 @@ export const useServerGeneralWS = defineStore('serverGeneralWS', () => {
     let path = `/servers/server-general-websocket/${serverId}`
     let url = api.defaults.baseURL.replace(/^http/, 'ws') + path
     serverGeneralWS.value = new WebSocket(url)
+
+    serverGeneralWS.value.onopen = () => {
+      // ping every 30 seconds to keep connection alive
+      interval.value = setInterval(() => {
+        if (serverGeneralWS.value && serverGeneralWS.value.readyState === WebSocket.OPEN) {
+          serverGeneralWS.value.send(JSON.stringify({ type: "ping" }));
+        }
+      }, 30 * 1000);
+    };
+
+    serverGeneralWS.value.onclose = () => {
+      if (interval.value) {
+        clearInterval(interval.value);
+        interval.value = null
+      }
+    };
   }
 
   function disconnect() {
     if (serverGeneralWS.value) {
       serverGeneralWS.value.close()
       serverGeneralWS.value = null
+    }
+    if (interval.value) {
+      clearInterval(interval.value);
+      interval.value = null
     }
   }
 
