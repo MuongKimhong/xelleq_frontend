@@ -17,7 +17,7 @@ import { useChatStore, useVoiceCallStore } from '@/stores/chat.js'
 import { useServerStore } from '@/stores/server.js'
 import { useBreakpoint } from '@/breakpoint.js'
 import { useUserStore } from '@/stores/user.js'
-import { userWSStore } from '@/stores/websocket/user.js'
+import { useUserWS } from '@/stores/websocket/user.js'
 import { storeToRefs } from 'pinia'
 import api from '@/axios.js'
 
@@ -42,7 +42,7 @@ const { isBreakPointMdAndDown } = useBreakpoint()
 
 const messageArea = useTemplateRef('messageArea')
 
-const userWS = userWSStore()
+const userWS = useUserWS()
 
 const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
