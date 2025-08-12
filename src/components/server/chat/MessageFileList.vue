@@ -39,25 +39,24 @@ function getGridCols(count) {
       ></audio>
     </div>
     <div v-else-if="message.file_data[0].file_type === 'image'">
-      <n-grid
-        :x-gap="4"
-        :cols="getGridCols(message.file_data.length)"
-        responsive="self"
-        style="max-width: 450px; width: 100%"
-      >
-        <n-grid-item
-          v-for="(img, idx) in message.file_data"
-          :key="idx"
-          style="width: 100%; max-width: 100%"
-        >
-          <n-image
-            :src="img.url"
-            width="100%"
-            preview-disabled
-            style="max-width: 100%; height: 150px; object-fit: cover; border-radius: 5px"
-          />
-        </n-grid-item>
-      </n-grid>
+      <div v-if="message.file_data.length > 1">
+        <n-grid :x-gap="4" :cols="getGridCols(message.file_data.length)" responsive="self">
+          <n-grid-item v-for="(img, idx) in message.file_data" :key="idx">
+            <n-image
+              :src="img.url"
+              width="100%"
+              preview-disabled
+              style="max-width: 100%; height: 150px; object-fit: cover; border-radius: 5px"
+            />
+          </n-grid-item>
+        </n-grid>
+      </div>
+      <div v-else>
+        <n-image
+          :src="message.file_data[0].url"
+          style="max-width: 450px; max-height: 400px"
+        ></n-image>
+      </div>
     </div>
   </div>
 </template>
