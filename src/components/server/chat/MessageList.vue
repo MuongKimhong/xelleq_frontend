@@ -318,6 +318,7 @@ async function startCall() {
         res.data['token'],
         res.data['uid'],
       )
+      userWS.updateOnVoiceCallFlag(true, res.data)
       await voiceCallStore.setupCallProcess(res.data['channel'])
       messages.value.push(res.data['new_msg'])
     }
@@ -351,7 +352,6 @@ async function joinCall(channel) {
         res.data['token'],
         res.data['uid'],
       )
-      userWS.updateOnVoiceCallFlag(true, res.data)
       await voiceCallStore.setupCallProcess(channel)
     }
   } catch (_) {}
