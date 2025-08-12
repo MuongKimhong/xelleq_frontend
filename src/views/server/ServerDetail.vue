@@ -5,6 +5,7 @@ import { useServerGeneralWS } from '@/stores/websocket/server_general.js'
 import { useSiderStore } from '@/stores/sider.js'
 import { useBaseStore } from '@/stores/base.js'
 import { useUserStore } from '@/stores/user.js'
+import { useChatWS } from '@/stores/websocket/chatroom.js'
 import { useBreakpoint } from '@/breakpoint.js'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -41,6 +42,9 @@ const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
 const baseStore = useBaseStore()
+
+const chatWSStore = useChatWS()
+const { chatWS } = storeToRefs(chatWSStore)
 
 const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
@@ -148,6 +152,7 @@ const serverPageKey = ref(null)
 
 function cleanUp() {
   serverGeneralWSStore.disconnect()
+  chatWSStore.disconnect()
   serverPageKey.value = null
 }
 
@@ -161,6 +166,17 @@ onMounted(async () => {
     serverGeneralWS.value.onmessage = (e) => {
       let data = JSON.parse(e.data)
       serverGeneralWSStore.handleMessageType(data)
+    }
+  }
+
+  if (serverData.value && serverData.value.isMember) {
+    if (chatWS.value === null && user.value.authenticated) {
+      chatWSStore.connect()
+
+      chatWS.value.onmessage = (e) => {
+        let data = JSON.parse(e.data)
+        chatWSStore.handleMessageType(data)
+      }
     }
   }
 })

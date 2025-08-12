@@ -6,6 +6,7 @@ import { useChatStore } from "../chat.js"
 import api from "@/axios.js"
 
 export const useChatWS = defineStore('chatWS', () => {
+  const interval = ref(null)
   const serverStore = useServerStore()
   const { serverData } = storeToRefs(serverStore)
 
@@ -22,6 +23,22 @@ export const useChatWS = defineStore('chatWS', () => {
       let path = `/rooms/chat-websocket/${serverData.value.id}`
       let url = api.defaults.baseURL.replace(/^http/, 'ws') + path
       chatWS.value = new WebSocket(url)
+
+      chatWS.value.onopen = () => {
+        // ping every 30 seconds to keep connection alive
+        interval.value = setInterval(() => {
+          if (chatWS.value && chatWS.value.readyState === WebSocket.OPEN) {
+            chatWS.value.send(JSON.stringify({ type: "ping" }));
+          }
+        }, 30 * 1000);
+      };
+
+      chatWS.value.onclose = () => {
+        if (interval.value) {
+          clearInterval(interval.value);
+          interval.value = null
+        }
+      };
     }
   }
 
@@ -29,6 +46,10 @@ export const useChatWS = defineStore('chatWS', () => {
     if (chatWS.value) {
       chatWS.value.close()
       chatWS.value = null
+    }
+    if (interval.value) {
+      clearInterval(interval.value)
+      interval.value = null
     }
   }
 
@@ -75,12 +96,14 @@ export const useChatWS = defineStore('chatWS', () => {
           } else {
             messages.value.push(data['new_msg_other'])
 
-            setTimeout(() => {
-              api.post("/message/mark-message-seen", {
-                room_id: openingRoomId.value,
-                server_id: serverData.value.id,
-                message_id: data["new_msg_other"]['id']
-              })
+            setTimeout(async () => {
+              try {
+                await api.post("/message/mark-message-seen", {
+                  room_id: openingRoomId.value,
+                  server_id: serverData.value.id,
+                  message_id: data["new_msg_other"]['id']
+                });
+              } catch (_) {}
             }, 1000)
           }
         }

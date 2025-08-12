@@ -26,7 +26,7 @@ function getGridCols(count) {
         :src="message.file_data[0].url"
         controls
         disablePictureInPicture
-        style="max-width: 450px; max-height: 420px"
+        style="max-width: 450px; max-height: 400px"
       ></video>
     </div>
     <div v-else-if="message.file_data[0].file_type === 'audio'">

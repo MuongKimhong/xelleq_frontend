@@ -5,7 +5,6 @@ defineOptions({
 import { useServerStore } from '@/stores/server.js'
 import { useUserStore } from '@/stores/user.js'
 import { useChatStore } from '@/stores/chat.js'
-import { useChatWS } from '@/stores/websocket/chatroom.js'
 import { useBreakpoint } from '@/breakpoint.js'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
@@ -34,26 +33,23 @@ const { user } = storeToRefs(userStore)
 const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
 
-const chatWSStore = useChatWS()
-const { chatWS } = storeToRefs(chatWSStore)
-
 const chatStore = useChatStore()
 const { openingRoomId, openingRoomName, openingRoom, rooms, messages } = storeToRefs(chatStore)
 
 const showMessageListOnSmallScreen = ref(false)
 
-onMounted(() => {
-  if (serverData.value.isMember) {
-    if (chatWS.value === null && user.value.authenticated) {
-      chatWSStore.connect()
+// onMounted(() => {
+//   if (serverData.value.isMember) {
+//     if (chatWS.value === null && user.value.authenticated) {
+//       chatWSStore.connect()
 
-      chatWS.value.onmessage = (e) => {
-        let data = JSON.parse(e.data)
-        chatWSStore.handleMessageType(data)
-      }
-    }
-  }
-})
+//       chatWS.value.onmessage = (e) => {
+//         let data = JSON.parse(e.data)
+//         chatWSStore.handleMessageType(data)
+//       }
+//     }
+//   }
+// })
 
 onBeforeUnmount(() => {
   openingRoomId.value = null
