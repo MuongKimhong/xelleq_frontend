@@ -11,8 +11,6 @@ const { serverData } = storeToRefs(serverStore)
 
 <template>
   <div class="mt-2 tab-content" style="padding: 0px 5px">
-    <span style="font-size: 22px; padding: 2px 0px">Description</span>
-
     <h3 style="white-space: pre-line">{{ serverData.description }}</h3>
   </div>
 </template>

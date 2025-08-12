@@ -55,7 +55,7 @@ function getGridCols(count) {
         <n-image
           :src="message.file_data[0].url"
           width="100%"
-          style="max-width: 400px; max-height: 400px"
+          style="max-width: 390px; max-height: 350px"
         ></n-image>
       </div>
     </div>
