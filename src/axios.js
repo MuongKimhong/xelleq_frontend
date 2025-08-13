@@ -7,7 +7,7 @@ import router from "@/router"
 // })
 
 const api = axios.create({
-  baseURL: 'https://plovkaapi.xelleq.com',
+  baseURL: 'https://aappii.xelleq.com',
   withCredentials: true,
 })
 
