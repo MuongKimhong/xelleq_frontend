@@ -32,8 +32,6 @@ const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
 const router = useRouter()
-
-const showAuthMenu = ref(false)
 const isLoggingOut = ref(false)
 
 // dark mode
@@ -80,21 +78,9 @@ function redirectCreatePost() {
 </script>
 
 <template>
-  <n-popover
-    trigger="manual"
-    raw
-    :show-arrow="false"
-    :show="showAuthMenu"
-    @clickoutside="showAuthMenu = false"
-  >
+  <n-popover trigger="click" raw :show-arrow="false">
     <template #trigger>
-      <n-button
-        v-if="user.profileUrl == null"
-        quaternary
-        circle
-        type="primary"
-        @click="showAuthMenu = !showAuthMenu"
-      >
+      <n-button v-if="user.profileUrl == null" quaternary circle type="primary">
         <template #icon>
           <n-icon :size="40"><UserCircleRegular /></n-icon>
         </template>
@@ -106,7 +92,6 @@ function redirectCreatePost() {
         height="40"
         preview-disabled
         class="profile-img"
-        @click="showAuthMenu = !showAuthMenu"
       ></n-image>
     </template>
 

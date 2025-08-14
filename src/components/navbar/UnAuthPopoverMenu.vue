@@ -18,8 +18,6 @@ const { theme } = storeToRefs(themeStore)
 
 const { t } = useI18n()
 
-const showUnAuthMenu = ref(false)
-
 // dark mode
 const switchOnDarkMode = ref(theme.value !== null)
 watch(switchOnDarkMode, (newVal) => {
@@ -36,15 +34,9 @@ watch(switchOnKhmerLang, (newVal) => {
 </script>
 
 <template>
-  <n-popover
-    trigger="manual"
-    raw
-    :show-arrow="false"
-    :show="showUnAuthMenu"
-    @clickoutside="showUnAuthMenu = false"
-  >
+  <n-popover trigger="click" raw :show-arrow="false">
     <template #trigger>
-      <n-button tertiary type="primary" @click="showUnAuthMenu = true">
+      <n-button tertiary type="primary">
         <n-icon :size="20">
           <SettingsOutline />
         </n-icon>

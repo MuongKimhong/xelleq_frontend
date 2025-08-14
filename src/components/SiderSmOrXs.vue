@@ -31,14 +31,9 @@ function onCreateServerPress() {
 </script>
 
 <template>
-  <n-popover
-    trigger="manual"
-    raw
-    :show="!collapsed"
-    :on-clickoutside="() => siderStore.toggleSider()"
-  >
+  <n-popover trigger="click" raw>
     <template #trigger>
-      <n-button tertiary type="primary" @click="siderStore.toggleSider()">
+      <n-button tertiary type="primary">
         <n-icon :size="15">
           <Bars />
         </n-icon>
