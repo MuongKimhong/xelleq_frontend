@@ -251,20 +251,12 @@ onBeforeUnmount(() => {
           <div class="file-wrapper">
             <a :href="file.url" target="_blank" rel="noopener noreferrer">
               <n-image
-                v-if="isImage(file.extension) && file.thumbnail_url"
-                :src="file.thumbnail_url"
-                width="100%"
-                lazy
-                preview-disabled
-              ></n-image>
-              <n-image
-                v-else-if="isImage(file.extension) && file.thumbnail_url == null"
+                v-if="isImage(file.extension)"
                 :src="file.url"
                 width="100%"
                 lazy
                 preview-disabled
               ></n-image>
-
               <n-image
                 v-else-if="isVideo(file.extension)"
                 :src="videoIcon"

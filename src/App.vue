@@ -4,7 +4,7 @@ import { NConfigProvider, NMessageProvider, NLayout, NLayoutContent } from 'naiv
 import { useRoute } from 'vue-router'
 import { useBreakpoint } from './breakpoint'
 import { useThemeStore } from './stores/theme'
-import { useUserStore } from './stores/user.js'
+import { useBaseStore } from './stores/base.js'
 import { useLangStore } from './stores/lang'
 import { storeToRefs } from 'pinia'
 import { ref, computed, onMounted } from 'vue'
@@ -16,6 +16,8 @@ const { isBreakPointMdAndUp } = useBreakpoint()
 const route = useRoute()
 const themeStore = useThemeStore()
 const { theme } = storeToRefs(themeStore)
+
+const { cachedViews } = useBaseStore()
 
 const langStore = useLangStore()
 const naiveLang = computed(() => langStore.naiveUIlang)
@@ -64,7 +66,7 @@ const themeOverrides = {
         <n-layout>
           <n-layout-content style="overflow: hidden">
             <router-view v-slot="{ Component }">
-              <keep-alive include="home,search-view">
+              <keep-alive :include="cachedViews">
                 <component v-if="route.name === 'home'" :is="Component" :key="'home'" />
                 <component v-else :is="Component" :key="routeComponentKey" />
               </keep-alive>

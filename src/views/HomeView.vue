@@ -5,7 +5,7 @@ import { useNewFeedStore } from '@/stores/newfeed.js'
 import { useUserStore } from '@/stores/user.js'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
-import { ref, onMounted, onActivated, onDeactivated, useTemplateRef } from 'vue'
+import { ref, onMounted, onActivated, onBeforeUnmount, useTemplateRef } from 'vue'
 import api from '@/axios.js'
 
 import PostContent from '@/components/server/forum/PostContent.vue'
@@ -137,6 +137,12 @@ function onPostUnsavedSuccess(index) {
     newFeedPosts.value[index].user_saved = false
   }
 }
+
+onBeforeUnmount(() => {
+  newFeedPosts.value.length = 0
+  totalPages.value = 0
+  currentPage.value = 0
+})
 </script>
 
 <template>
