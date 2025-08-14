@@ -173,7 +173,11 @@ function closeModal() {
                 application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
                 application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,
                 application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.presentation,
-                application/font-woff,application/font-sfnt
+                application/font-woff,application/font-sfnt,application/pdf,text/csv,
+                text/plain,text/markdown,text/x-python,text/rust,text/javascript,text/typescript,
+                text/x-java-source,text/x-c,text/x-c++,text/html,text/css,application/json,text/x-go,
+                application/x-php,text/x-ruby,application/x-sh,text/x-swift,text/x-kotlin,text/x-scala,text/x-lua,
+                text/x-dart,application/sql,application/x-yaml
               "
         >
           <n-upload-dragger>

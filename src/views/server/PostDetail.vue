@@ -270,7 +270,7 @@ const postDetailContainer = useTemplateRef('postDetailContainer')
 .post-detail-container {
   scroll-behavior: smooth;
   will-change: transform;
-  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
   overflow-y: auto;
   overflow-x: hidden;
 }
