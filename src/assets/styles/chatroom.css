@@ -124,9 +124,6 @@
   padding: 0;
 }
 .room {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 4px;
@@ -162,8 +159,4 @@
 .viewing {
   background-color: rgba(32, 128, 240, 0.15);
   border-radius: 4px;
-}
-
-.selected-upload-image {
-
 }

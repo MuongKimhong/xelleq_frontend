@@ -184,39 +184,43 @@ onMounted(async () => {
           :class="{ viewing: room.id === openingRoomId }"
           @click="onRoomPress(room, index)"
         >
-          <div
-            :class="{
-              'room-name-lg-and-up': isBreakPointLgAndUp,
-              'room-name-md-and-down': isBreakPointMdAndDown,
-            }"
-          >
-            <n-icon :size="10" v-if="room.on_voice_call"><PhoneAlt style="color: green" /></n-icon>
-            <span> #{{ room.name }} </span>
-          </div>
-
-          <div v-if="room.has_msg_to_be_seen">
-            <n-tag type="error" size="small" class="mr-1" round>new</n-tag>
-
-            <n-popover
-              v-if="serverData.isAdmin || serverData.isModerator"
-              trigger="click"
-              placement="left"
-              :show-arrow="false"
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <div
+              :class="{
+                'room-name-lg-and-up': isBreakPointLgAndUp,
+                'room-name-md-and-down': isBreakPointMdAndDown,
+              }"
             >
-              <template #trigger>
-                <n-button size="tiny" tertiary round>
-                  <n-icon :size="10"><DotsVertical /></n-icon>
-                </n-button>
-              </template>
-              <div style="width: 80px; padding: 0px">
-                <div class="room-popover-list" @click="onRenameBtnPress(index, room.id)">
-                  {{ t('rename') }}
+              <n-icon :size="10" v-if="room.on_voice_call"
+                ><PhoneAlt style="color: green"
+              /></n-icon>
+              <span> # {{ room.name }} </span>
+            </div>
+
+            <div v-if="room.has_msg_to_be_seen">
+              <n-tag type="error" size="small" class="mr-1" round>new</n-tag>
+
+              <n-popover
+                v-if="serverData.isAdmin || serverData.isModerator"
+                trigger="click"
+                placement="left"
+                :show-arrow="false"
+              >
+                <template #trigger>
+                  <n-button size="tiny" tertiary round>
+                    <n-icon :size="10"><DotsVertical /></n-icon>
+                  </n-button>
+                </template>
+                <div style="width: 80px; padding: 0px">
+                  <div class="room-popover-list" @click="onRenameBtnPress(index, room.id)">
+                    {{ t('rename') }}
+                  </div>
+                  <!-- <div class="room-popover-list" @click="onDeleteBtnPress(index, room.id)">
+                    {{ t('delete') }}
+                  </div> -->
                 </div>
-                <!-- <div class="room-popover-list" @click="onDeleteBtnPress(index, room.id)">
-                  {{ t('delete') }}
-                </div> -->
-              </div>
-            </n-popover>
+              </n-popover>
+            </div>
           </div>
         </div>
 

@@ -19,7 +19,7 @@ export const useChatStore = defineStore('chatStore', () => {
 })
 
 export const useVoiceCallStore = defineStore('voiceCallStore', () => {
-  const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
+  const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
   const agoraClient = ref(null)
   const callingChannel = ref(null) // use to keep track which channel user is on
   const isCalling = ref(false)
@@ -86,11 +86,12 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
         if (mediaType === 'audio') user.audioTrack.stop()
       })
 
-      // agoraClient.value.on('user-joined', (user) => {
-      //   console.log('Remote user joined:', user)
-      // })
+      agoraClient.value.on('user-joined', (user) => {
+        console.log('Remote user joined:', user)
+      })
 
       agoraClient.value.on('user-left', (user) => {
+        console.log("remoted user left:", user)
         if (user.audioTrack) {
           user.audioTrack.stop()
           user.audioTrack.removeAllListeners()
