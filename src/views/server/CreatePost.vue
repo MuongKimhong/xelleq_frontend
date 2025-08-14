@@ -329,7 +329,7 @@ onBeforeUnmount(() => {
                   </n-button>
                 </n-upload>
 
-                <n-carousel show-arrow class="mt-4">
+                <n-carousel show-arrow class="mt-4" :touchable="false">
                   <div v-for="(image, index) in selectedImages" :key="index" class="carousel-slide">
                     <img :src="image.url" class="carousel-bg" alt="" />
 
@@ -367,10 +367,10 @@ onBeforeUnmount(() => {
                   <n-button> Attach video </n-button>
                 </n-upload>
 
-                <div v-if="selectedVideo" class="carousel-slide mt-4">
+                <div v-if="selectedVideo" class="carousel-slide-video mt-4">
                   <video
                     :src="selectedVideo.url"
-                    class="carousel-img"
+                    class="carousel-video"
                     alt=""
                     autoplay
                     muted
@@ -383,7 +383,7 @@ onBeforeUnmount(() => {
           </n-tabs>
         </div>
 
-        <div v-if="canPressCreate" style="text-align: right; margin-top: 30px; margin-bottom: 30px">
+        <div v-if="canPressCreate" style="text-align: right; margin-top: 10px; margin-bottom: 30px">
           <n-button type="primary" :loading="creating" :disabled="creating" @click="createPost()">
             Create
           </n-button>
@@ -451,10 +451,23 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 550px;
+  height: 400px;
   overflow: hidden;
 }
-
+.carousel-slide-video {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  overflow: hidden;
+}
+.carousel-video {
+  max-width: 100%;
+  object-fit: contain;
+  z-index: 1;
+  position: relative;
+}
 .carousel-img {
   max-width: 100%;
   max-height: 100%;

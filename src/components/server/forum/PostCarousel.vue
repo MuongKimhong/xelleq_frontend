@@ -33,6 +33,8 @@ function viewMedia() {
     <n-carousel
       :show-arrow="medias.length > 1"
       class="pb-2 pt-2"
+      style="touch-action: pan-y"
+      :touchable="false"
       :loop="false"
       @click="viewMedia()"
     >
@@ -45,6 +47,7 @@ function viewMedia() {
           'media-wrapper': isBreakPointMdAndUp && !fullScreen,
           'media-wrapper-fullscreen': fullScreen,
         }"
+        class="media"
       >
         <div class="media-blur-bg">
           <img :src="media.url" loading="lazy" alt="" class="blur-img" />

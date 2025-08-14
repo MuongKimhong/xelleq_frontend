@@ -94,8 +94,8 @@ const title = computed(() => {
     <div class="toolbar">
       <n-button
         size="small"
-        @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-        :type="editor.isActive('heading', { level: 2 }) ? 'primary' : 'default'"
+        @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+        :type="editor.isActive('heading', { level: 3 }) ? 'primary' : 'default'"
       >
         <n-icon><Heading /></n-icon>
       </n-button>
@@ -173,6 +173,7 @@ const title = computed(() => {
   max-height: 660px;
   overflow-y: auto;
   margin-top: 15px;
+  font-size: 16px;
 }
 .editor-card {
   max-width: 100%;
