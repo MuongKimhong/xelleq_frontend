@@ -15,6 +15,7 @@ import {
   useMessage,
 } from 'naive-ui'
 import { MdCloseCircleOutline } from '@vicons/ionicons4'
+import { ArrowLeft, ArrowRight } from '@vicons/fa'
 import { useCreatePostStore } from '@/stores/forum.js'
 import { useUserStore } from '@/stores/user.js'
 import { useServerStore } from '@/stores/server.js'
@@ -349,6 +350,25 @@ onBeforeUnmount(() => {
                     </n-button>
                     <img :src="image.url" class="carousel-img" alt="" />
                   </div>
+                  <template #arrow="{ prev, next }">
+                    <div class="custom-arrow">
+                      <button type="button" class="custom-arrow--left" @click.stop="prev">
+                        <n-icon><ArrowLeft /></n-icon>
+                      </button>
+                      <button type="button" class="custom-arrow--right" @click.stop="next">
+                        <n-icon><ArrowRight /></n-icon>
+                      </button>
+                    </div>
+                  </template>
+                  <template #dots="{ total, currentIndex, to }">
+                    <ul class="custom-dots">
+                      <li
+                        v-for="index of total"
+                        :key="index"
+                        :class="{ ['is-active']: currentIndex === index - 1 }"
+                      />
+                    </ul>
+                  </template>
                 </n-carousel>
               </div>
             </n-tab-pane>
@@ -431,6 +451,50 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.custom-arrow {
+  display: flex;
+  position: absolute;
+  bottom: 25px;
+  right: 10px;
+}
+
+.custom-arrow button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-width: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.custom-dots {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  bottom: 39px;
+  left: 10px;
+}
+
+.custom-dots li {
+  display: inline-block;
+  width: 12px;
+  height: 4px;
+  margin: 0 3px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+}
+
+.custom-dots li.is-active {
+  width: 25px;
+  background: #fff;
+}
 .create-post-container {
   display: flex;
   flex-direction: column;
