@@ -172,13 +172,13 @@ onMounted(() => getAllTopics())
     "
   >
     <div id="create-server-card">
-      <h2 style="text-align: center">{{ t('createServer') }}</h2>
-
       <div v-if="showErrText" style="text-align: center; margin-bottom: 15px">
         <n-tag type="error">{{ errText }}</n-tag>
       </div>
 
       <div :class="{ container: isBreakPointMdAndUp, 'container-sm-xs': isBreakPointSmOrXs }">
+         <h2 style="text-align: center">{{ t('createServer') }}</h2>
+        
         <div>
           <n-input :placeholder="t('serverName')" show-count maxlength="35" v-model:value="name">
           </n-input>
