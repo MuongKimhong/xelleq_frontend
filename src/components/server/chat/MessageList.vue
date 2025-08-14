@@ -316,7 +316,7 @@ async function startCall() {
         voiceCallStore.appId,
         res.data['channel']['name'],
         res.data['token'],
-        res.data['uid'],
+        res.data['starter_uid'],
       )
       userWS.updateOnVoiceCallFlag(true, res.data)
       await voiceCallStore.setupCallProcess(res.data['channel'])
@@ -350,8 +350,9 @@ async function joinCall(channel) {
         voiceCallStore.appId,
         channel.name,
         res.data['token'],
-        res.data['uid'],
+        res.data['joiner_uid'],
       )
+      userWS.updateUserJoinOrLeave(true, res.data)
       await voiceCallStore.setupCallProcess(channel)
     }
   } catch (_) {}
@@ -374,6 +375,7 @@ async function leaveCall() {
     })
 
     if (res.status === 200) {
+      userWS.updateUserJoinOrLeave(false, res.data)
       await voiceCallStore.cleanUpChannel()
     }
   } catch (_) {}

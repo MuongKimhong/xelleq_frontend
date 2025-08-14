@@ -1,6 +1,7 @@
 <script setup>
 import { NTag, NSpin, NPopover, NButton, NIcon } from 'naive-ui'
 import { DotsVertical } from '@vicons/tabler'
+import { Speaker220Regular } from '@vicons/fluent'
 import { PhoneAlt, Plus } from '@vicons/fa'
 import { useChatStore } from '@/stores/chat.js'
 import { useServerStore } from '@/stores/server.js'
@@ -220,6 +221,21 @@ onMounted(async () => {
                   </div> -->
                 </div>
               </n-popover>
+            </div>
+          </div>
+
+          <!-- list of user in call -->
+          <div style="padding-left: 10px" class="mt-1" v-if="room.on_voice_call">
+            <div
+              v-for="userInCall in room.users_in_voice_call"
+              :key="userInCall"
+              :class="{
+                'user-incall-name-lg-and-up': isBreakPointLgAndUp,
+                'user-incall-name-md-and-down': isBreakPointMdAndDown,
+              }"
+            >
+              <n-icon :size="15"><Speaker220Regular /> </n-icon>
+              <span class="ml-1"> {{ userInCall }} </span>
             </div>
           </div>
         </div>

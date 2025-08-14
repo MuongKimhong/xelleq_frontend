@@ -86,12 +86,7 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
         if (mediaType === 'audio') user.audioTrack.stop()
       })
 
-      agoraClient.value.on('user-joined', (user) => {
-        console.log('Remote user joined:', user)
-      })
-
       agoraClient.value.on('user-left', (user) => {
-        console.log("remoted user left:", user)
         if (user.audioTrack) {
           user.audioTrack.stop()
           user.audioTrack.removeAllListeners()

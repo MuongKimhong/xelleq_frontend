@@ -146,6 +146,21 @@
     text-overflow: ellipsis;
     display: inline-block;
 }
+.user-incall-name-lg-and-up {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    max-width: 260px;
+    align-items: center;
+}
+.user-incall-name-md-and-down {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+}
 .room-popover-list {
     text-align: center;
     padding-top: 4px;

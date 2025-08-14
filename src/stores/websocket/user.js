@@ -86,8 +86,10 @@ export const useUserWS = defineStore('userWSStore', () => {
 
         if (flag) {
           rooms.value[index].active_voice_channel = wsData['channel']
+          rooms.value[index].users_in_voice_call.push(wsData['starter_uid'])
         } else {
           rooms.value[index].active_voice_channel = null
+          rooms.value[index].users_in_voice_call.length = 0
         }
       }
     }
@@ -97,6 +99,26 @@ export const useUserWS = defineStore('userWSStore', () => {
 
       if (index !== -1) {
         joinedServers.value[index].on_voice_call = flag
+      }
+    }
+  }
+
+  function updateUserJoinOrLeave(flag, wsData) {
+    if (rooms.value.length > 0) {
+      let index = rooms.value.findIndex((r) => r.id === wsData['room_id'])
+
+      if (index !== -1) {
+        if (flag) {
+          rooms.value[index].users_in_voice_call.push(wsData['joiner_uid'])
+          return
+        }
+
+        for (let i = 0; i < rooms.value[index].users_in_voice_call.length; i++) {
+          if (rooms.value[index].users_in_voice_call[i] === wsData['leaver_uid']) {
+            rooms.value[index].users_in_voice_call.splice(i, 1)
+            return
+          }
+        }
       }
     }
   }
@@ -116,6 +138,14 @@ export const useUserWS = defineStore('userWSStore', () => {
           await voiceCallStore.cleanUpChannel()
         }
         catch (_) {}
+        break
+
+      case "UserJoin":
+        updateUserJoinOrLeave(true, data)
+        break
+
+      case "UserLeft":
+        updateUserJoinOrLeave(false, data)
         break
 
       case "NewPostNotification":
@@ -160,6 +190,7 @@ export const useUserWS = defineStore('userWSStore', () => {
     connect,
     disconnect,
     handleMessageType,
-    updateOnVoiceCallFlag
+    updateOnVoiceCallFlag,
+    updateUserJoinOrLeave
   }
 })
