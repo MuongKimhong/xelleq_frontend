@@ -1,7 +1,6 @@
 <script setup>
 import { NInput, NSelect, NSwitch, NButton, NTag } from 'naive-ui'
 import { useServerStore } from '../../stores/server.js'
-import { useBreakpoint } from '../../breakpoint.js'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ref, onMounted } from 'vue'
@@ -9,7 +8,6 @@ import api from '../../axios.js'
 
 import '../../assets/base.css'
 
-const { isBreakPointSmOrXs, isBreakPointMdAndUp } = useBreakpoint()
 const { t } = useI18n()
 const router = useRouter()
 const serverStore = useServerStore()
@@ -165,12 +163,11 @@ onMounted(() => getAllTopics())
 <template>
   <div
     style="
-      display: flex;
-      flex-direction: column;
       height: calc(100dvh - 60px);
       overflow-y: auto;
       scroll-behavior: smooth;
-      will-change: transform;
+      display: flex;
+      flex-direction: column;
     "
   >
     <div id="create-server-card">
@@ -178,101 +175,99 @@ onMounted(() => getAllTopics())
         <n-tag type="error">{{ errText }}</n-tag>
       </div>
 
-      <div :class="{ container: isBreakPointMdAndUp, 'container-sm-xs': isBreakPointSmOrXs }">
-         <h2 style="text-align: center">{{ t('createServer') }}</h2>
-        
-        <div>
-          <n-input :placeholder="t('serverName')" show-count maxlength="35" v-model:value="name">
-          </n-input>
-          <n-input
-            v-model:value="description"
-            :placeholder="t('serverDescription')"
-            size="large"
-            type="textarea"
-            maxlength="200"
-            show-count
-            class="mt-4"
+      <div class="wrapper">
+        <h2 class="mt-4">{{ t('createServer') }}</h2>
+
+        <n-input :placeholder="t('serverName')" show-count maxlength="35" v-model:value="name">
+        </n-input>
+        <n-input
+          v-model:value="description"
+          :placeholder="t('serverDescription')"
+          size="large"
+          type="textarea"
+          maxlength="200"
+          show-count
+          class="mt-4"
+        />
+
+        <n-input
+          v-model:value="ruleDescription"
+          :placeholder="t('serverRules')"
+          size="large"
+          type="textarea"
+          maxlength="600"
+          show-count
+          class="mt-4"
+          :autosize="{
+            minRows: 5,
+            maxRows: 15,
+          }"
+        />
+
+        <div class="mt-4">
+          <n-select
+            :placeholder="t('serverType')"
+            v-model:value="selectedServerOption"
+            :options="serverOptions"
           />
+        </div>
+
+        <div class="mt-4">
+          <div class="info-row">
+            <span>{{ t('postsNeedApproval') }}</span>
+            <n-switch v-model:value="postsNeedApproval" :rubber-band="false"></n-switch>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <h3>{{ t('topics') }}</h3>
+          <span>{{ t('chooseTopicDescription') }}</span>
 
           <n-input
-            v-model:value="ruleDescription"
-            :placeholder="t('serverRules')"
-            size="large"
-            type="textarea"
-            maxlength="600"
-            show-count
             class="mt-4"
-            :autosize="{
-              minRows: 5,
-              maxRows: 15,
-            }"
-          />
+            :placeholder="t('searchTopic')"
+            @input="onTopicSearch()"
+            v-model:value="searchText"
+          ></n-input>
 
-          <div class="mt-4">
-            <n-select
-              :placeholder="t('serverType')"
-              v-model:value="selectedServerOption"
-              :options="serverOptions"
-            />
-          </div>
+          <n-tag
+            v-for="topic in selectedTopics"
+            closable
+            type="primary"
+            class="mx-1 mt-2"
+            @close="removeTopic(topic.id)"
+          >
+            {{ topic.name }}
+          </n-tag>
+        </div>
 
-          <div class="mt-4">
-            <div class="info-row">
-              <span>{{ t('postsNeedApproval') }}</span>
-              <n-switch v-model:value="postsNeedApproval" :rubber-band="false"></n-switch>
-            </div>
-          </div>
+        <div class="mt-4 topic-list">
+          <div v-for="topic in searchTopicResults" :key="topic.id" class="mt-4">
+            <span class="topic-letter">{{ topic.alphabet_char }}</span>
+            <hr class="underline" />
 
-          <div class="mt-4">
-            <h3>{{ t('topics') }}</h3>
-            <span>{{ t('chooseTopicDescription') }}</span>
-
-            <n-input
-              class="mt-4"
-              :placeholder="t('searchTopic')"
-              @input="onTopicSearch()"
-              v-model:value="searchText"
-            ></n-input>
-
-            <n-tag
-              v-for="topic in selectedTopics"
-              closable
-              type="primary"
-              class="mx-1 mt-2"
-              @close="removeTopic(topic.id)"
-            >
-              {{ topic.name }}
-            </n-tag>
-          </div>
-
-          <div class="mt-4 topic-list">
-            <div v-for="topic in searchTopicResults" :key="topic.id" class="mt-4">
-              <span class="topic-letter">{{ topic.alphabet_char }}</span>
-              <hr class="underline" />
-
-              <n-button
-                v-for="related in topic.related_topics"
-                size="small"
-                class="mx-1 mt-1"
-                round
-                @click="selectTopic(related.id)"
-              >
-                {{ related.name }}
-              </n-button>
-            </div>
-          </div>
-
-          <div style="text-align: right; margin-top: 50px">
             <n-button
-              tertiary
-              type="primary"
-              @click="createServer()"
-              :loading="isSubmitting"
-              :disabled="isSubmitting"
+              v-for="related in topic.related_topics"
+              size="small"
+              class="mx-1 mt-1"
+              round
+              @click="selectTopic(related.id)"
             >
-              {{ t('create') }}
+              {{ related.name }}
             </n-button>
           </div>
+        </div>
+
+        <div style="text-align: right; margin-top: 20px; margin-bottom: 20px">
+          <n-button
+            tertiary
+            type="primary"
+            @click="createServer()"
+            :loading="isSubmitting"
+            :disabled="isSubmitting"
+          >
+            {{ t('create') }}
+          </n-button>
         </div>
       </div>
     </div>
@@ -287,25 +282,7 @@ onMounted(() => getAllTopics())
   padding-left: 10px;
   padding-right: 10px;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.container-sm-xs {
-  max-width: 400px;
-  justify-content: center;
-  align-content: center;
-}
-.container {
-  width: 500px;
-  justify-content: center;
-  align-content: center;
-}
-.container-sm-xs,
-.container {
-  margin: 0 auto; /* centers the block */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 500px;
 }
 .info-row {
   display: flex;
@@ -314,6 +291,7 @@ onMounted(() => getAllTopics())
 }
 .topic-list {
   overflow-y: scroll;
+  scroll-behavior: smooth;
   max-height: 320px;
   height: 320px;
   border: 1px solid rgba(128, 128, 128, 0.3);
@@ -329,5 +307,8 @@ onMounted(() => getAllTopics())
 }
 .topic-letter {
   font-size: 18px;
+}
+.wrapper {
+  padding: 10px;
 }
 </style>

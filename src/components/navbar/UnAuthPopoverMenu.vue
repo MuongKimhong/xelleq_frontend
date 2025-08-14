@@ -53,7 +53,7 @@ watch(switchOnKhmerLang, (newVal) => {
         </span>
         <n-switch v-model:value="switchOnDarkMode"></n-switch>
       </div>
-      <div class="settings-row">
+      <!-- <div class="settings-row">
         <span class="label-with-icon">
           <n-icon :size="15">
             <LanguageOutlined />
@@ -61,7 +61,7 @@ watch(switchOnKhmerLang, (newVal) => {
           {{ t('khmer') }}
         </span>
         <n-switch v-model:value="switchOnKhmerLang" />
-      </div>
+      </div> -->
 
       <div class="mt-4">
         <n-button

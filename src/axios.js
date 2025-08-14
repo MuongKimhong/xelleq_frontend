@@ -1,5 +1,5 @@
 import axios from 'axios'
-import router from "@/router"
+import router from '@/router'
 
 // const api = axios.create({
 //   baseURL: 'http://localhost:8000',
@@ -12,7 +12,7 @@ const api = axios.create({
 })
 
 api.interceptors.response.use(
-  response => response,
+  (response) => response,
   async (error) => {
     if (error.response && error.response.status === 401) {
       const { useUserStore } = await import('@/stores/user.js')
@@ -25,7 +25,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error)
-  }
+  },
 )
 
 export default api

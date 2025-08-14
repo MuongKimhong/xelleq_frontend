@@ -132,7 +132,7 @@ function redirectCreatePost() {
         </span>
         <n-switch v-model:value="switchOnDarkMode" :rubber-band="false"></n-switch>
       </div>
-      <div class="settings-row">
+      <!-- <div class="settings-row">
         <span class="label-with-icon">
           <n-icon :size="15">
             <LanguageOutlined />
@@ -140,7 +140,7 @@ function redirectCreatePost() {
           {{ t('khmer') }}
         </span>
         <n-switch v-model:value="switchOnKhmerLang" :rubber-band="false"></n-switch>
-      </div>
+      </div> -->
       <div
         class="settings-row-clickable"
         :class="{ 'disabled-div': isLoggingOut }"
