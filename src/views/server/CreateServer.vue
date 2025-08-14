@@ -163,105 +163,114 @@ onMounted(() => getAllTopics())
 </script>
 
 <template>
-  <div id="create-server-card">
-    <h2 style="text-align: center">{{ t('createServer') }}</h2>
+  <div
+    style="
+      height: calc(100dvh - 60px);
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      will-change: transform;
+    "
+  >
+    <div id="create-server-card">
+      <h2 style="text-align: center">{{ t('createServer') }}</h2>
 
-    <div v-if="showErrText" style="text-align: center; margin-bottom: 15px">
-      <n-tag type="error">{{ errText }}</n-tag>
-    </div>
+      <div v-if="showErrText" style="text-align: center; margin-bottom: 15px">
+        <n-tag type="error">{{ errText }}</n-tag>
+      </div>
 
-    <div :class="{ container: isBreakPointMdAndUp, 'container-sm-xs': isBreakPointSmOrXs }">
-      <div>
-        <n-input :placeholder="t('serverName')" show-count maxlength="35" v-model:value="name">
-        </n-input>
-        <n-input
-          v-model:value="description"
-          :placeholder="t('serverDescription')"
-          size="large"
-          type="textarea"
-          maxlength="200"
-          show-count
-          class="mt-4"
-        />
-
-        <n-input
-          v-model:value="ruleDescription"
-          :placeholder="t('serverRules')"
-          size="large"
-          type="textarea"
-          maxlength="600"
-          show-count
-          class="mt-4"
-          :autosize="{
-            minRows: 5,
-            maxRows: 15,
-          }"
-        />
-
-        <div class="mt-4">
-          <n-select
-            :placeholder="t('serverType')"
-            v-model:value="selectedServerOption"
-            :options="serverOptions"
+      <div :class="{ container: isBreakPointMdAndUp, 'container-sm-xs': isBreakPointSmOrXs }">
+        <div>
+          <n-input :placeholder="t('serverName')" show-count maxlength="35" v-model:value="name">
+          </n-input>
+          <n-input
+            v-model:value="description"
+            :placeholder="t('serverDescription')"
+            size="large"
+            type="textarea"
+            maxlength="200"
+            show-count
+            class="mt-4"
           />
-        </div>
-
-        <div class="mt-4">
-          <div class="info-row">
-            <span>{{ t('postsNeedApproval') }}</span>
-            <n-switch v-model:value="postsNeedApproval" :rubber-band="false"></n-switch>
-          </div>
-        </div>
-
-        <div class="mt-4">
-          <h3>{{ t('topics') }}</h3>
-          <span>{{ t('chooseTopicDescription') }}</span>
 
           <n-input
+            v-model:value="ruleDescription"
+            :placeholder="t('serverRules')"
+            size="large"
+            type="textarea"
+            maxlength="600"
+            show-count
             class="mt-4"
-            :placeholder="t('searchTopic')"
-            @input="onTopicSearch()"
-            v-model:value="searchText"
-          ></n-input>
+            :autosize="{
+              minRows: 5,
+              maxRows: 15,
+            }"
+          />
 
-          <n-tag
-            v-for="topic in selectedTopics"
-            closable
-            type="primary"
-            class="mx-1 mt-2"
-            @close="removeTopic(topic.id)"
-          >
-            {{ topic.name }}
-          </n-tag>
-        </div>
+          <div class="mt-4">
+            <n-select
+              :placeholder="t('serverType')"
+              v-model:value="selectedServerOption"
+              :options="serverOptions"
+            />
+          </div>
 
-        <div class="mt-4 topic-list">
-          <div v-for="topic in searchTopicResults" :key="topic.id" class="mt-4">
-            <span class="topic-letter">{{ topic.alphabet_char }}</span>
-            <hr class="underline" />
+          <div class="mt-4">
+            <div class="info-row">
+              <span>{{ t('postsNeedApproval') }}</span>
+              <n-switch v-model:value="postsNeedApproval" :rubber-band="false"></n-switch>
+            </div>
+          </div>
 
-            <n-button
-              v-for="related in topic.related_topics"
-              size="small"
-              class="mx-1 mt-1"
-              round
-              @click="selectTopic(related.id)"
+          <div class="mt-4">
+            <h3>{{ t('topics') }}</h3>
+            <span>{{ t('chooseTopicDescription') }}</span>
+
+            <n-input
+              class="mt-4"
+              :placeholder="t('searchTopic')"
+              @input="onTopicSearch()"
+              v-model:value="searchText"
+            ></n-input>
+
+            <n-tag
+              v-for="topic in selectedTopics"
+              closable
+              type="primary"
+              class="mx-1 mt-2"
+              @close="removeTopic(topic.id)"
             >
-              {{ related.name }}
+              {{ topic.name }}
+            </n-tag>
+          </div>
+
+          <div class="mt-4 topic-list">
+            <div v-for="topic in searchTopicResults" :key="topic.id" class="mt-4">
+              <span class="topic-letter">{{ topic.alphabet_char }}</span>
+              <hr class="underline" />
+
+              <n-button
+                v-for="related in topic.related_topics"
+                size="small"
+                class="mx-1 mt-1"
+                round
+                @click="selectTopic(related.id)"
+              >
+                {{ related.name }}
+              </n-button>
+            </div>
+          </div>
+
+          <div style="text-align: right; margin-top: 50px">
+            <n-button
+              tertiary
+              type="primary"
+              @click="createServer()"
+              :loading="isSubmitting"
+              :disabled="isSubmitting"
+            >
+              {{ t('create') }}
             </n-button>
           </div>
-        </div>
-
-        <div style="text-align: right; margin-top: 50px">
-          <n-button
-            tertiary
-            type="primary"
-            @click="createServer()"
-            :loading="isSubmitting"
-            :disabled="isSubmitting"
-          >
-            {{ t('create') }}
-          </n-button>
         </div>
       </div>
     </div>
@@ -270,16 +279,14 @@ onMounted(() => getAllTopics())
 
 <style scoped>
 #create-server-card {
-  justify-content: center;
-  align-content: center;
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 20px;
   padding-left: 10px;
   padding-right: 10px;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  will-change: transform;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .container-sm-xs {
   max-width: 400px;
@@ -306,6 +313,9 @@ onMounted(() => getAllTopics())
 .topic-list {
   overflow-y: scroll;
   max-height: 320px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 5px;
+  padding: 5px;
 }
 .underline {
   border: none;
