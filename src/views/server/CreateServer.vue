@@ -313,6 +313,7 @@ onMounted(() => getAllTopics())
 .topic-list {
   overflow-y: scroll;
   max-height: 320px;
+  height: 320px;
   border: 1px solid rgba(128, 128, 128, 0.3);
   border-radius: 5px;
   padding: 5px;
