@@ -167,6 +167,8 @@ onMounted(() => getAllTopics())
     style="
       display: flex;
       flex-direction: column;
+      height: calc(100dvh - 60px);
+      padding-top: 60px;
       overflow-y: auto;
       scroll-behavior: smooth;
       will-change: transform;
