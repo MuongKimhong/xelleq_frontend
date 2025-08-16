@@ -66,7 +66,7 @@ async function uploadFile(selectedFile) {
   formData.append('file_name', selectedFile.name)
 
   try {
-    let res = await api.post('/servers/upload-file-to-server', formData, {
+    let res = await api.post('/servers/upload-file-to-server-chunk', formData, {
       onUploadProgress: (progressEvent) => {
         selectedFile.percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
       },
@@ -107,7 +107,11 @@ async function uploadBatch() {
 
   for (let i = 0; i < selectedFiles.value.length; i++) {
     if (!showErrText.value) {
-      await uploadFile(selectedFiles.value[i])
+      try {
+        await uploadFile(selectedFiles.value[i])
+      } catch (_) {
+        continue
+      }
     }
   }
 
