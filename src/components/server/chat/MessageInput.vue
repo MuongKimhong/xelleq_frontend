@@ -33,7 +33,7 @@ const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
 
 const chatStore = useChatStore()
-const { openingRoomId } = storeToRefs(chatStore)
+const { openingRoom } = storeToRefs(chatStore)
 
 const naiveUIMessage = useMessage()
 const message = ref('')
@@ -167,7 +167,7 @@ function onSelectVideo(data) {
 }
 
 async function sendMessage() {
-  if (openingRoomId.value === null) return
+  if (openingRoom.value === null) return
 
   sending.value = true
   emit('sending-msg', true)
@@ -175,7 +175,7 @@ async function sendMessage() {
   let formData = new FormData()
   formData.append('text', message.value)
   formData.append('server_id', serverData.value.id)
-  formData.append('room_id', openingRoomId.value)
+  formData.append('room_id', openingRoom.value.id)
 
   if (props.replyToMsg) {
     formData.append('reply_to_message_id', props.replyToMsg.id)
@@ -254,7 +254,7 @@ async function onEnterPress(e) {
 </script>
 
 <template>
-  <div v-if="openingRoomId">
+  <div v-if="openingRoom">
     <div v-if="selectedImages.length > 0" class="mb-2">
       <transition-group
         name="message-fade"
