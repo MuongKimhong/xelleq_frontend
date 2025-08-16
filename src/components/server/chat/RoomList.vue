@@ -29,7 +29,7 @@ const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
 
 const chatStore = useChatStore()
-const { openingRoomId, openingRoomName, openingRoom, rooms } = storeToRefs(chatStore)
+const { openingRoom, rooms } = storeToRefs(chatStore)
 
 const showCreateRoomModal = ref(false)
 const showRenameRoomModal = ref(false)
@@ -54,10 +54,6 @@ async function getChatRooms() {
 
     if (res.status === 200) {
       rooms.value = res.data
-
-      // if (res.data.length > 0) {
-      //   openingRoomIdMap.value[`${serverData.value.id}`] = res.data[0].id
-      // }
     }
   } catch (_) {
     loadErr.value = true
@@ -81,8 +77,10 @@ function onRenameRoomSuccess(newName) {
   if (renamingRoomIndex.value !== null) {
     rooms.value[renamingRoomIndex.value]['name'] = newName
 
-    if (rooms.value[renamingRoomIndex.value].id === openingRoomId.value) {
-      openingRoomName.value = newName
+    if (openingRoom.value) {
+      if (rooms.value[renamingRoomIndex.value].id === openingRoom.value.id) {
+        openingRoom.value.name = newName
+      }
     }
 
     showRenameRoomModal.value = false
@@ -107,8 +105,6 @@ function onDeleteRoomSuccess() {
 }
 
 function onRoomPress(room, roomIndex) {
-  openingRoomId.value = room.id
-  openingRoomName.value = room.name
   openingRoom.value = room
 
   if (rooms.value.length > 0) {
@@ -182,7 +178,7 @@ onMounted(async () => {
           v-for="(room, index) in rooms"
           :key="room.id"
           class="mb-1 room"
-          :class="{ viewing: room.id === openingRoomId }"
+          :class="{ viewing: openingRoom && room.id === openingRoom.id }"
           @click="onRoomPress(room, index)"
         >
           <div style="display: flex; justify-content: space-between; align-items: center">

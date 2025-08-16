@@ -3,15 +3,11 @@ import { defineStore } from 'pinia'
 import AgoraRTC from 'agora-rtc-sdk-ng'
 
 export const useChatStore = defineStore('chatStore', () => {
-  const openingRoomId = ref(null)
-  const openingRoomName = ref(null)
   const openingRoom = ref(null)
   const rooms = ref([])
   const messages = ref([])
 
   return {
-    openingRoomId,
-    openingRoomName,
     openingRoom,
     rooms,
     messages
@@ -20,6 +16,7 @@ export const useChatStore = defineStore('chatStore', () => {
 
 export const useVoiceCallStore = defineStore('voiceCallStore', () => {
   const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
+  // const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
   const agoraClient = ref(null)
   const callingChannel = ref(null) // use to keep track which channel user is on
   const isCalling = ref(false)

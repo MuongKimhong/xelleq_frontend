@@ -1,7 +1,6 @@
 <script setup>
 import { NImage } from 'naive-ui'
 import '../assets/styles/loginRegister.css'
-import celliqLogo from '../assets/celliq_logo.png'
 import { useUserStore } from '../stores/user.js'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -17,7 +16,7 @@ const { user } = storeToRefs(userStore)
 <template>
   <div style="margin-top: 20px">
     <div style="text-align: center">
-      <n-image :src="celliqLogo" width="120" preview-disabled id="logo" />
+      <n-image src="/celliq_logo.png" width="120" preview-disabled id="logo" />
     </div>
 
     <h1 style="text-align: center">404 Not Found</h1>

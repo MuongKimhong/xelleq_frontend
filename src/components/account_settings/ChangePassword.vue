@@ -1,16 +1,15 @@
 <script setup>
 import { NInputGroup, NInput, NIcon, NButton, useMessage } from 'naive-ui'
 import { EyeOffOutline, EyeOutline } from '@vicons/ionicons5'
-import { useLangStore } from '../../stores/lang.js'
-import { useBreakpoint } from '../../breakpoint.js'
+import { useLangStore } from '@/stores/lang.js'
+import { useBreakpoint } from '@/breakpoint.js'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ref, watch, onMounted, computed } from 'vue'
-import api from '../../axios.js'
+import api from '@/axios.js'
 
-import defaultUserProfile from '../../assets/default_user_profile.png'
-import '../../assets/styles/loginRegister.css'
-import '../../assets/base.css'
+import '@/assets/styles/loginRegister.css'
+import '@/assets/base.css'
 
 const { isBreakPointSmOrXs, isBreakPointMdAndUp, isBreakPointSmAndUp } = useBreakpoint()
 const { t } = useI18n()

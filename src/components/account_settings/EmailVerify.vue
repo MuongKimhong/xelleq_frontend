@@ -9,7 +9,6 @@ import { useI18n } from 'vue-i18n'
 import { ref, watch, onMounted } from 'vue'
 import api from '../../axios.js'
 
-import defaultUserProfile from '../../assets/default_user_profile.png'
 import '../../assets/base.css'
 
 const { isBreakPointSmOrXs, isBreakPointMdAndUp, isBreakPointSmAndUp } = useBreakpoint()

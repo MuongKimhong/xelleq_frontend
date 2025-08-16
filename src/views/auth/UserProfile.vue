@@ -6,7 +6,6 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useUserProfileStore } from '@/stores/profile.js'
 import { storeToRefs } from 'pinia'
 import api from '@/axios.js'
-import defaultUserProfile from '@/assets/default_user_profile.png'
 import '@/assets/styles/server.css'
 import '@/assets/base.css'
 

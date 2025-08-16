@@ -2,7 +2,6 @@
 import { NSpin, NImage, NTag } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { useTemplateRef } from 'vue'
-import defaultUserProfile from '@/assets/default_user_profile.png'
 import '@/assets/styles/profile.css'
 import '@/assets/styles/search.css'
 import '@/assets/base.css'
@@ -118,7 +117,7 @@ function redirectPostDetail(post, serverId) {
                 />
                 <n-image
                   v-else
-                  :src="defaultUserProfile"
+                  src="/default_user_profile.png"
                   preview-disabled
                   class="mt-1"
                   width="32"

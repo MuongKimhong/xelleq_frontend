@@ -9,16 +9,15 @@ import {
   NPopover,
   useMessage,
 } from 'naive-ui'
-import { useUserStore } from '../../stores/user.js'
+import { useUserStore } from '@/stores/user.js'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-import api from '../../axios.js'
+import api from '@/axios.js'
 
-import defaultUserProfile from '../../assets/default_user_profile.png'
-import '../../assets/styles/loginRegister.css'
-import '../../assets/base.css'
+import '@/assets/styles/loginRegister.css'
+import '@/assets/base.css'
 
 const { t } = useI18n()
 const userStore = useUserStore()
@@ -127,7 +126,7 @@ async function removeProfilePicture() {
     <div style="text-align: center">
       <n-image
         v-if="user.profileUrl === null"
-        :src="defaultUserProfile"
+        src="/default_user_profile.png"
         width="100"
         height="100"
         :lazy="true"

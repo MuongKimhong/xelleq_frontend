@@ -26,11 +26,7 @@ import api from '@/axios.js'
 import UploadModal from './UploadModal.vue'
 import DeleteModal from './DeleteModal.vue'
 import UpdateNameModal from './UpdateNameModal.vue'
-import pdfIcon from '@/assets/pdf_icon.png'
-import fileIcon from '@/assets/file-icon.png'
-import docxIcon from '@/assets/docx_icon.png'
-import videoIcon from '@/assets/video_icon.png'
-import audioIcon from '@/assets/audio_icon.png'
+
 import '@/assets/styles/server.css'
 import '@/assets/base.css'
 
@@ -259,29 +255,29 @@ onBeforeUnmount(() => {
               ></n-image>
               <n-image
                 v-else-if="isVideo(file.extension)"
-                :src="videoIcon"
+                src="/video_icon.png"
                 width="100%"
                 preview-disabled
               ></n-image>
               <n-image
                 v-else-if="isAudio(file.extension)"
-                :src="audioIcon"
+                src="/audio_icon.png"
                 width="100%"
                 preview-disabled
               ></n-image>
               <n-image
                 v-else-if="isPdf(file.extension)"
-                :src="pdfIcon"
+                src="/pdf_icon.png"
                 width="100%"
                 preview-disabled
               ></n-image>
               <n-image
                 v-else-if="isDoc(file.extension)"
-                :src="docxIcon"
+                src="/docx_icon.png"
                 width="100%"
                 preview-disabled
               ></n-image>
-              <n-image v-else :src="fileIcon" width="100%" preview-disabled></n-image>
+              <n-image v-else src="/file_icon.png" width="100%" preview-disabled></n-image>
             </a>
 
             <div class="file-header">

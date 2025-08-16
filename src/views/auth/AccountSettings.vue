@@ -13,7 +13,6 @@ import EmailVerify from '../../components/account_settings/EmailVerify.vue'
 import UpdateProfilePhoto from '../../components/account_settings/UpdateProfilePhoto.vue'
 import ChangePassword from '../../components/account_settings/ChangePassword.vue'
 
-import defaultUserProfile from '../../assets/default_user_profile.png'
 import '../../assets/styles/loginRegister.css'
 import '../../assets/base.css'
 

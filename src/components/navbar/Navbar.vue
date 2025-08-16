@@ -19,8 +19,7 @@ import AuthPopoverMenu from './AuthPopoverMenu.vue'
 import UnAuthPopoverMenu from './UnAuthPopoverMenu.vue'
 import SiderSmOrXs from '../SiderSmOrXs.vue'
 
-import '../../assets/styles/navbar.css'
-import celliqLogoSmall from '../../assets/celliq_logo_small.png'
+import '@/assets/styles/navbar.css'
 
 const { t } = useI18n()
 
@@ -96,7 +95,7 @@ watch(
           </n-icon>
         </n-button>
 
-        <n-image :src="celliqLogoSmall" width="50" preview-disabled @click="redirectHome()" />
+        <n-image src="/celliq_logo_small.png" width="50" preview-disabled @click="redirectHome()" />
         <span v-if="isBreakPointLgAndUp" id="celliq-name" @click="redirectHome()">Xelleq</span>
       </div>
       <!-- end left -->

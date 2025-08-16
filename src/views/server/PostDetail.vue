@@ -11,7 +11,6 @@ import hljs from 'highlight.js'
 import api from '@/axios.js'
 
 // import EditorRichText from '../../components/server/forum/EditorRichText.vue'
-import defaultUserProfile from '@/assets/default_user_profile.png'
 import CommentList from '@/components/server/forum/comment/CommentList.vue'
 import CommentInput from '@/components/server/forum/comment/CommentInput.vue'
 import PostContent from '@/components/server/forum/PostContent.vue'

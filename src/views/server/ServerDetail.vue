@@ -5,14 +5,12 @@ import { useServerGeneralWS } from '@/stores/websocket/server_general.js'
 import { useBaseStore } from '@/stores/base.js'
 import { useUserStore } from '@/stores/user.js'
 import { useChatWS } from '@/stores/websocket/chatroom.js'
-import { useBreakpoint } from '@/breakpoint.js'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import api from '@/axios.js'
 
-import defaultUserProfile from '@/assets/default_user_profile.png'
 import '@/assets/styles/server.css'
 import '@/assets/base.css'
 
@@ -25,7 +23,6 @@ import ForumTab from '@/components/server/forum/ForumTab.vue'
 import DescriptionTab from '@/components/server/DescriptionTab.vue'
 import RulesTab from '@/components/server/RulesTab.vue'
 
-const { isBreakPointSmOrXs, isBreakPointMdAndUp, isBreakPointSmAndUp } = useBreakpoint()
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
@@ -239,7 +236,7 @@ onBeforeUnmount(() => {
           height="32"
           class="profile-img"
         />
-        <n-image v-else :src="defaultUserProfile" width="32" height="32" />
+        <n-image v-else src="/default_user_profile.png" width="32" height="32" />
 
         <div class="name-detail-container">
           <div style="display: flex; flex-direction: column">

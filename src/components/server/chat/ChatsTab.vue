@@ -34,26 +34,11 @@ const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
 
 const chatStore = useChatStore()
-const { openingRoomId, openingRoomName, openingRoom, rooms, messages } = storeToRefs(chatStore)
+const { openingRoom, rooms, messages } = storeToRefs(chatStore)
 
 const showMessageListOnSmallScreen = ref(false)
 
-// onMounted(() => {
-//   if (serverData.value.isMember) {
-//     if (chatWS.value === null && user.value.authenticated) {
-//       chatWSStore.connect()
-
-//       chatWS.value.onmessage = (e) => {
-//         let data = JSON.parse(e.data)
-//         chatWSStore.handleMessageType(data)
-//       }
-//     }
-//   }
-// })
-
 onBeforeUnmount(() => {
-  openingRoomId.value = null
-  openingRoomName.value = null
   openingRoom.value = null
   rooms.value.length = 0
   messages.value.length = 0
@@ -61,8 +46,6 @@ onBeforeUnmount(() => {
 
 function onGoBackRoomList() {
   showMessageListOnSmallScreen.value = false
-  openingRoomId.value = null
-  openingRoomName.value = null
   openingRoom.value = null
   messages.value.length = 0
 }

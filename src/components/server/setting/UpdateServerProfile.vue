@@ -16,8 +16,6 @@ import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import api from '../../../axios.js'
 
-import defaultUserProfile from '../../../assets/default_user_profile.png'
-
 const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
 const { t } = useI18n()
@@ -141,7 +139,7 @@ async function removeServerProfile() {
         height="100"
         class="profile-img"
       ></n-image>
-      <n-image v-else :src="defaultUserProfile" width="80" height="80"></n-image>
+      <n-image v-else src="/default_user_profile.png" width="80" height="80"></n-image>
     </div>
     <div style="text-align: center" class="mt-2">
       <n-popover placement="bottom" trigger="click" :show-arrow="false">

@@ -9,7 +9,6 @@ import { useUserStore } from '@/stores/user.js'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 import api from '@/axios.js'
-import defaultUserProfile from '@/assets/default_user_profile.png'
 
 import PostCarousel from './PostCarousel.vue'
 import '@/assets/styles/postDetail.css'
@@ -215,7 +214,7 @@ function onEditPostBtnPress() {
         />
         <n-image
           v-else
-          :src="defaultUserProfile"
+          src="/default_user_profile.png"
           @click="redirectServer()"
           preview-disabled
           class="mt-1"

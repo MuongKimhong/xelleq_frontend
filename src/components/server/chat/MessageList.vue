@@ -51,7 +51,7 @@ const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
 const chatStore = useChatStore()
-const { openingRoomId, openingRoomName, openingRoom, messages } = storeToRefs(chatStore)
+const { openingRoom, messages } = storeToRefs(chatStore)
 
 const voiceCallStore = useVoiceCallStore()
 const { agoraClient, callingChannel, userUserUIDS } = storeToRefs(voiceCallStore)
@@ -123,7 +123,7 @@ function jumpToButtom() {
 
 async function handleScroll() {
   const container = messageArea.value
-  if (!container || loading.value) return
+  if (!container || loading.value || !openingRoom.value) return
 
   if (container.scrollTop < 0) {
     showJumpDownBtn.value = true
@@ -139,7 +139,7 @@ async function handleScroll() {
 
   // In column-reverse, bottom = older messages
   if (distanceToBottom <= threshold) {
-    await getMessages(openingRoomId.value, false)
+    await getMessages(openingRoom.value.id, false)
   }
 }
 
@@ -169,15 +169,18 @@ watch(
   },
 )
 
-watch(openingRoomId, async (newOpeningRoomId) => {
-  if (newOpeningRoomId !== null) {
-    removeScrollListener()
-    changingRoom.value = true
-    await getMessages(newOpeningRoomId, true)
-    changingRoom.value = false
-    addScrollListener()
-  }
-})
+watch(
+  () => openingRoom.value?.id,
+  async (newOpeningRoomId) => {
+    if (newOpeningRoomId) {
+      removeScrollListener()
+      changingRoom.value = true
+      await getMessages(newOpeningRoomId, true)
+      changingRoom.value = false
+      addScrollListener()
+    }
+  },
+)
 
 onBeforeUnmount(() => {
   removeScrollListener()
@@ -278,7 +281,7 @@ const joiningCall = ref(false)
 const leavingCall = ref(false)
 
 async function endCall() {
-  if (!serverData.value || !openingRoomId.value || !callingChannel.value) return
+  if (!serverData.value || !openingRoom.value || !callingChannel.value) return
 
   endingCall.value = true
 
@@ -286,7 +289,7 @@ async function endCall() {
     let res = await api.delete('/voicecall/end-voice-call', {
       data: {
         server_id: serverData.value.id,
-        room_id: openingRoomId.value,
+        room_id: openingRoom.value.id,
       },
     })
 
@@ -300,14 +303,14 @@ async function endCall() {
 }
 
 async function startCall() {
-  if (!serverData.value || !openingRoomId.value) return
+  if (!serverData.value || !openingRoom.value) return
 
   startingCall.value = true
 
   try {
     let res = await api.post('/voicecall/start-voice-call', {
       server_id: serverData.value.id,
-      room_id: openingRoomId.value,
+      room_id: openingRoom.value.id,
     })
 
     if (res.status === 200) {
@@ -333,14 +336,14 @@ async function startCall() {
 }
 
 async function joinCall(channel) {
-  if (!serverData.value || !openingRoomId.value) return
+  if (!serverData.value || !openingRoom.value) return
 
   joiningCall.value = true
 
   try {
     let res = await api.post('/voicecall/join-voice-call', {
       server_id: serverData.value.id,
-      room_id: openingRoomId.value,
+      room_id: openingRoom.value.id,
       channel_name: channel.name,
     })
 
@@ -361,14 +364,14 @@ async function joinCall(channel) {
 }
 
 async function leaveCall() {
-  if (!serverData.value || !openingRoomId.value || !callingChannel.value) return
+  if (!serverData.value || !openingRoom.value || !callingChannel.value) return
 
   leavingCall.value = true
 
   try {
     let res = await api.delete('/voicecall/leave-voice-call', {
       data: {
-        room_id: openingRoomId.value,
+        room_id: openingRoom.value.id,
         server_id: serverData.value.id,
         channel_name: callingChannel.value.name,
       },
@@ -386,7 +389,7 @@ async function leaveCall() {
 
 <template>
   <div v-if="!loadErr" class="message-container">
-    <div v-if="openingRoomName" class="message-upper-container">
+    <div v-if="openingRoom" class="message-upper-container">
       <div style="display: flex; align-items: center">
         <n-button
           v-if="isBreakPointMdAndDown"
@@ -401,12 +404,12 @@ async function leaveCall() {
             <n-icon><ArrowBackIosRound /></n-icon>
           </template>
         </n-button>
-        <span style="font-weight: bold">#{{ openingRoomName }}</span>
+        <span style="font-weight: bold">#{{ openingRoom.name }}</span>
       </div>
 
       <div>
         <n-button
-          v-if="openingRoom && !openingRoom.on_voice_call"
+          v-if="!openingRoom.on_voice_call"
           type="primary"
           size="tiny"
           round
@@ -419,7 +422,7 @@ async function leaveCall() {
           </template>
         </n-button>
         <n-button
-          v-if="openingRoom && openingRoom.on_voice_call && callingChannel"
+          v-if="openingRoom.on_voice_call && callingChannel"
           type="error"
           size="tiny"
           class="mr-1"
@@ -434,7 +437,7 @@ async function leaveCall() {
           End
         </n-button>
         <n-button
-          v-if="openingRoom && callingChannel === null && openingRoom.active_voice_channel"
+          v-if="callingChannel === null && openingRoom.on_voice_call"
           type="primary"
           size="tiny"
           round
@@ -448,7 +451,7 @@ async function leaveCall() {
           Join
         </n-button>
         <n-button
-          v-if="openingRoom && openingRoom.on_voice_call && callingChannel"
+          v-if="openingRoom.on_voice_call && callingChannel"
           type="error"
           size="tiny"
           round
@@ -469,18 +472,20 @@ async function leaveCall() {
     </div>
 
     <DeleteMessageModal
+      v-if="openingRoom"
       :show-modal="showDeleteModal"
       :server-id="serverData.id"
-      :room-id="openingRoomId"
+      :room-id="openingRoom.id"
       :message="msgObjectPopover"
       @close-delete-msg-modal="showDeleteModal = false"
       @delete-msg-success="onDeleteMsgSuccess"
     />
 
     <UpdateMessageModal
+      v-if="openingRoom"
       :show-modal="showUpdateModal"
       :server-id="serverData.id"
-      :room-id="openingRoomId"
+      :room-id="openingRoom.id"
       :message="msgObjectPopover"
       @close-update-msg-modal="showUpdateModal = false"
       @update-msg-success="onUpdateMsgSuccess"

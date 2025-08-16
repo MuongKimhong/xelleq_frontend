@@ -72,12 +72,6 @@ export const useUserWS = defineStore('userWSStore', () => {
       }
     }
 
-    if (openingRoom.value) {
-      if (openingRoom.value.id === wsData["room_id"]) {
-        openingRoom.value['on_voice_call'] = flag
-      }
-    }
-
     if (rooms.value.length > 0) {
       let index = rooms.value.findIndex((r) => r.id === wsData['room_id'])
 
@@ -90,6 +84,10 @@ export const useUserWS = defineStore('userWSStore', () => {
         } else {
           rooms.value[index].active_voice_channel = null
           rooms.value[index].users_in_voice_call.length = 0
+        }
+
+        if (openingRoom.value && openingRoom.value.id === wsData["room_id"]) {
+          openingRoom.value = rooms.value[index]
         }
       }
     }

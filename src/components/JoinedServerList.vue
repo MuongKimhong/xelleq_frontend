@@ -7,7 +7,6 @@ import { useBreakpoint } from '@/breakpoint.js'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
-import defaultUserProfile from '@/assets/default_user_profile.png'
 import '@/assets/styles/sider.css'
 import '@/assets/base.css'
 
@@ -52,7 +51,7 @@ function redirectServerDetail(server) {
           class="profile-img"
           preview-disabled
         ></n-image>
-        <n-image v-else :src="defaultUserProfile" width="25" height="25"></n-image>
+        <n-image v-else src="/default_user_profile.png" width="25" height="25"></n-image>
         <span>
           <n-icon :size="10" v-if="server.on_voice_call"><PhoneAlt style="color: green" /></n-icon>
           {{ server.name }}
