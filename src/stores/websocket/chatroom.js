@@ -14,7 +14,7 @@ export const useChatWS = defineStore('chatWS', () => {
   const { user }  = storeToRefs(userStore)
 
   const chatStore = useChatStore()
-  const { openingRoomId, openingRoomName, rooms, messages } = storeToRefs(chatStore)
+  const { openingRoom, rooms, messages } = storeToRefs(chatStore)
 
   const chatWS = ref(null)
 
@@ -71,9 +71,9 @@ export const useChatWS = defineStore('chatWS', () => {
           }
         }
 
-        if (openingRoomId.value && openingRoomName.value) {
-          if (openingRoomId.value === data['room_id']) {
-            openingRoomName.value = data["new_name"]
+        if (openingRoom.value) {
+          if (openingRoom.value.id === data['room_id']) {
+            openingRoom.value.name = data["new_name"]
           }
         }
         break
@@ -81,7 +81,7 @@ export const useChatWS = defineStore('chatWS', () => {
       case "NewMessage":
         let newMsgRoomId = data["room_id"]
 
-        if ((openingRoomId.value !== newMsgRoomId) || !openingRoomId.value)
+        if ((openingRoom.value.id !== newMsgRoomId) || !openingRoom.value)
         {
           let index = rooms.value.findIndex((r) => r.id === newMsgRoomId)
 
@@ -90,7 +90,7 @@ export const useChatWS = defineStore('chatWS', () => {
           }
         }
 
-        if (openingRoomId.value === newMsgRoomId) {
+        if (openingRoom.value?.id === newMsgRoomId) {
           if (user.value.id === data['sender_id']) {
             messages.value.push(data['new_msg_self'])
           } else {
@@ -99,7 +99,7 @@ export const useChatWS = defineStore('chatWS', () => {
             setTimeout(async () => {
               try {
                 await api.post("/message/mark-message-seen", {
-                  room_id: openingRoomId.value,
+                  room_id: openingRoom.value.id,
                   server_id: serverData.value.id,
                   message_id: data["new_msg_other"]['id']
                 });
