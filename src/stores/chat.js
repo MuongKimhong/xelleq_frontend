@@ -15,11 +15,9 @@ export const useChatStore = defineStore('chatStore', () => {
 })
 
 export const useVoiceCallStore = defineStore('voiceCallStore', () => {
-  const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
-  // const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
+  // const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
+  const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
   const agoraClient = ref(null)
-  const callingChannel = ref(null) // use to keep track which channel user is on
-  const isCalling = ref(false)
   const localAudioTrack = ref(null)
   const userUserUIDS = ref([])
 
@@ -27,11 +25,6 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
     // vue reactivity interfer with agora object,
     // has to use markRaw to store raw object without reactivity
     agoraClient.value = markRaw(AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' }))
-  }
-
-  function setChannel(channel) {
-    callingChannel.value = channel
-    isCalling.value = true
   }
 
   async function setLocalAudio() {
@@ -57,8 +50,6 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
       throw e
     }
     agoraClient.value = null
-    callingChannel.value = null
-    isCalling.value = false
     localAudioTrack.value = null
   }
 
@@ -72,8 +63,6 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
 
   async function setupCallProcess(channel) {
     try {
-      setChannel(channel)
-
       agoraClient.value.on('user-published', async (user, mediaType) => {
         await agoraClient.value.subscribe(user, mediaType)
         if (mediaType === 'audio') user.audioTrack.play()
@@ -100,13 +89,10 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
   return {
     appId,
     agoraClient,
-    callingChannel,
-    isCalling,
     cleanUpChannel,
     setClient,
     setLocalAudio,
     publishLocalAudio,
-    setChannel,
     setupCallProcess,
     userUserUIDS
   }
