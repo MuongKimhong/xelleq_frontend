@@ -41,7 +41,6 @@ function viewMedia() {
       <div
         v-for="(media, mediaIndex) in medias"
         :key="media.id"
-        v-memo="[media.url]"
         :class="{
           'media-wrapper-sm-and-xs': isBreakPointSmOrXs,
           'media-wrapper': isBreakPointMdAndUp && !fullScreen,

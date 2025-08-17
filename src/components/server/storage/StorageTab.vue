@@ -277,7 +277,7 @@ onBeforeUnmount(() => {
                 width="100%"
                 preview-disabled
               ></n-image>
-              <n-image v-else src="/file_icon.png" width="100%" preview-disabled></n-image>
+              <n-image v-else src="/file-icon.png" width="100%" preview-disabled></n-image>
             </a>
 
             <div class="file-header">
