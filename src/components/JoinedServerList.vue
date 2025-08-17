@@ -1,6 +1,5 @@
 <script setup>
-import { NImage, NTag, NIcon } from 'naive-ui'
-import { PhoneAlt } from '@vicons/fa'
+import { NImage, NTag } from 'naive-ui'
 import { useSiderStore } from '@/stores/sider.js'
 import { useServerStore, useViewingServerStore } from '@/stores/server.js'
 import { useBreakpoint } from '@/breakpoint.js'
@@ -53,7 +52,6 @@ function redirectServerDetail(server) {
         ></n-image>
         <n-image v-else src="/default_user_profile.png" width="25" height="25"></n-image>
         <span>
-          <n-icon :size="10" v-if="server.on_voice_call"><PhoneAlt style="color: green" /></n-icon>
           {{ server.name }}
         </span>
       </div>

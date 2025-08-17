@@ -54,7 +54,7 @@ const chatStore = useChatStore()
 const { openingRoom, messages } = storeToRefs(chatStore)
 
 const voiceCallStore = useVoiceCallStore()
-const { agoraClient, callingChannel, userUserUIDS } = storeToRefs(voiceCallStore)
+const { agoraClient } = storeToRefs(voiceCallStore)
 
 const loading = ref(false)
 const loadErr = ref(false)
@@ -275,67 +275,10 @@ function onSendingMsg(flag) {
 //   } catch (_) {}
 // }
 
-const endingCall = ref(false)
-const startingCall = ref(false)
 const joiningCall = ref(false)
 const leavingCall = ref(false)
 
-async function endCall() {
-  if (!serverData.value || !openingRoom.value || !callingChannel.value) return
-
-  endingCall.value = true
-
-  try {
-    let res = await api.delete('/voicecall/end-voice-call', {
-      data: {
-        server_id: serverData.value.id,
-        room_id: openingRoom.value.id,
-      },
-    })
-
-    if (res.status === 200) {
-      messages.value.push(res.data)
-    }
-    await voiceCallStore.cleanUpChannel()
-  } catch (_) {}
-
-  endingCall.value = false
-}
-
-async function startCall() {
-  if (!serverData.value || !openingRoom.value) return
-
-  startingCall.value = true
-
-  try {
-    let res = await api.post('/voicecall/start-voice-call', {
-      server_id: serverData.value.id,
-      room_id: openingRoom.value.id,
-    })
-
-    if (res.status === 200) {
-      voiceCallStore.setClient()
-      await agoraClient.value.join(
-        voiceCallStore.appId,
-        res.data['channel']['name'],
-        res.data['token'],
-        res.data['starter_uid'],
-      )
-      userWS.updateOnVoiceCallFlag(true, res.data)
-      await voiceCallStore.setupCallProcess(res.data['channel'])
-      messages.value.push(res.data['new_msg'])
-    }
-  } catch (_) {
-    // if something wrong, delete channel
-    try {
-      await endCall()
-    } catch (_) {}
-  }
-
-  startingCall.value = false
-}
-
-async function joinCall(channel) {
+async function joinCall() {
   if (!serverData.value || !openingRoom.value) return
 
   joiningCall.value = true
@@ -344,19 +287,18 @@ async function joinCall(channel) {
     let res = await api.post('/voicecall/join-voice-call', {
       server_id: serverData.value.id,
       room_id: openingRoom.value.id,
-      channel_name: channel.name,
     })
 
     if (res.status === 200) {
       voiceCallStore.setClient()
       await agoraClient.value.join(
         voiceCallStore.appId,
-        channel.name,
+        res.data['channel_name'],
         res.data['token'],
         res.data['joiner_uid'],
       )
       userWS.updateUserJoinOrLeave(true, res.data)
-      await voiceCallStore.setupCallProcess(channel)
+      await voiceCallStore.setupCallProcess()
     }
   } catch (_) {}
 
@@ -364,7 +306,7 @@ async function joinCall(channel) {
 }
 
 async function leaveCall() {
-  if (!serverData.value || !openingRoom.value || !callingChannel.value) return
+  if (!serverData.value || !openingRoom.value) return
 
   leavingCall.value = true
 
@@ -373,7 +315,6 @@ async function leaveCall() {
       data: {
         room_id: openingRoom.value.id,
         server_id: serverData.value.id,
-        channel_name: callingChannel.value.name,
       },
     })
 
@@ -409,41 +350,13 @@ async function leaveCall() {
 
       <div>
         <n-button
-          v-if="!openingRoom.on_voice_call"
-          type="primary"
-          size="tiny"
-          round
-          :loading="startingCall"
-          :disabled="startingCall"
-          @click="startCall()"
-        >
-          <template #icon>
-            <n-icon><PhoneAlt /></n-icon>
-          </template>
-        </n-button>
-        <n-button
-          v-if="openingRoom.on_voice_call && callingChannel"
-          type="error"
-          size="tiny"
-          class="mr-1"
-          round
-          :loading="endingCall"
-          :disabled="endingCall"
-          @click="endCall()"
-        >
-          <template #icon>
-            <n-icon><PhoneAlt /></n-icon>
-          </template>
-          End
-        </n-button>
-        <n-button
-          v-if="callingChannel === null && openingRoom.on_voice_call"
+          v-if="!openingRoom.users_in_voice_call.includes(user.username)"
           type="primary"
           size="tiny"
           round
           :disabled="joiningCall"
           :loading="joiningCall"
-          @click="joinCall(openingRoom.active_voice_channel)"
+          @click="joinCall()"
         >
           <template #icon>
             <n-icon><PhoneAlt /></n-icon>
@@ -451,7 +364,7 @@ async function leaveCall() {
           Join
         </n-button>
         <n-button
-          v-if="openingRoom.on_voice_call && callingChannel"
+          v-else-if="openingRoom.users_in_voice_call.includes(user.username)"
           type="error"
           size="tiny"
           round

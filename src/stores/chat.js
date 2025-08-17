@@ -61,7 +61,7 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
     }
   }
 
-  async function setupCallProcess(channel) {
+  async function setupCallProcess() {
     try {
       agoraClient.value.on('user-published', async (user, mediaType) => {
         await agoraClient.value.subscribe(user, mediaType)

@@ -2,7 +2,7 @@
 import { NTag, NSpin, NPopover, NButton, NIcon } from 'naive-ui'
 import { DotsVertical } from '@vicons/tabler'
 import { Speaker220Regular } from '@vicons/fluent'
-import { PhoneAlt, Plus } from '@vicons/fa'
+import { Plus } from '@vicons/fa'
 import { useChatStore } from '@/stores/chat.js'
 import { useServerStore } from '@/stores/server.js'
 import { useBreakpoint } from '@/breakpoint.js'
@@ -188,9 +188,6 @@ onMounted(async () => {
                 'room-name-md-and-down': isBreakPointMdAndDown,
               }"
             >
-              <n-icon :size="10" v-if="room.on_voice_call"
-                ><PhoneAlt style="color: green"
-              /></n-icon>
               <span> # {{ room.name }} </span>
             </div>
 
@@ -221,7 +218,7 @@ onMounted(async () => {
           </div>
 
           <!-- list of user in call -->
-          <div style="padding-left: 10px" class="mt-1" v-if="room.on_voice_call">
+          <div style="padding-left: 10px" class="mt-1" v-if="room.users_in_voice_call.length > 0">
             <div
               v-for="userInCall in room.users_in_voice_call"
               :key="userInCall"

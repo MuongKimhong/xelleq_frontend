@@ -65,42 +65,6 @@ export const useUserWS = defineStore('userWSStore', () => {
     }
   }
 
-  function updateOnVoiceCallFlag(flag, wsData) {
-    if (serverData.value) {
-      if (serverData.value.id === wsData['server_id']) {
-        serverData.value['on_voice_call'] = flag
-      }
-    }
-
-    if (rooms.value.length > 0) {
-      let index = rooms.value.findIndex((r) => r.id === wsData['room_id'])
-
-      if (index !== -1) {
-        rooms.value[index].on_voice_call = flag
-
-        if (flag) {
-          rooms.value[index].active_voice_channel = wsData['channel']
-          rooms.value[index].users_in_voice_call.push(wsData['starter_uid'])
-        } else {
-          rooms.value[index].active_voice_channel = null
-          rooms.value[index].users_in_voice_call.length = 0
-        }
-
-        if (openingRoom.value && openingRoom.value.id === wsData["room_id"]) {
-          openingRoom.value = rooms.value[index]
-        }
-      }
-    }
-
-    if (joinedServers.value.length > 0) {
-      let index = joinedServers.value.findIndex((s) => s.id === wsData['server_id'])
-
-      if (index !== -1) {
-        joinedServers.value[index].on_voice_call = flag
-      }
-    }
-  }
-
   function updateUserJoinOrLeave(flag, wsData) {
     if (rooms.value.length > 0) {
       let index = rooms.value.findIndex((r) => r.id === wsData['room_id'])
@@ -108,14 +72,19 @@ export const useUserWS = defineStore('userWSStore', () => {
       if (index !== -1) {
         if (flag) {
           rooms.value[index].users_in_voice_call.push(wsData['joiner_uid'])
-          return
+        } else {
+          for (let i = 0; i < rooms.value[index].users_in_voice_call.length; i++) {
+            if (rooms.value[index].users_in_voice_call[i] === wsData['leaver_uid']) {
+              rooms.value[index].users_in_voice_call.splice(i, 1)
+              break
+            }
+          }
         }
 
-        for (let i = 0; i < rooms.value[index].users_in_voice_call.length; i++) {
-          if (rooms.value[index].users_in_voice_call[i] === wsData['leaver_uid']) {
-            rooms.value[index].users_in_voice_call.splice(i, 1)
-            return
-          }
+        if (openingRoom.value?.id === rooms.value[index].id) {
+          console.log("before", openingRoom.value)
+          openingRoom.value.users_in_voice_call = rooms.value[index].users_in_voice_call
+          console.log("after", openingRoom.value)
         }
       }
     }
@@ -126,19 +95,7 @@ export const useUserWS = defineStore('userWSStore', () => {
     let data = parsedData['User'].data
 
     switch (msgType) {
-      case "VoiceCallStart":
-        updateOnVoiceCallFlag(true, data)
-        break
-
-      case "VoiceCallEnd":
-        updateOnVoiceCallFlag(false, data)
-        try {
-          await voiceCallStore.cleanUpChannel()
-        }
-        catch (_) {}
-        break
-
-      case "UserJoin":
+      case "UserJoined":
         updateUserJoinOrLeave(true, data)
         break
 
@@ -188,7 +145,6 @@ export const useUserWS = defineStore('userWSStore', () => {
     connect,
     disconnect,
     handleMessageType,
-    updateOnVoiceCallFlag,
     updateUserJoinOrLeave
   }
 })
