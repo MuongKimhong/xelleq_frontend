@@ -44,7 +44,7 @@ export const useServerGeneralWS = defineStore('serverGeneralWS', () => {
 
   function disconnect() {
     if (serverGeneralWS.value) {
-      serverGeneralWS.value.close()
+      serverGeneralWS.value.close(4004, "change-server-view")
       serverGeneralWS.value = null
     }
     if (interval.value) {

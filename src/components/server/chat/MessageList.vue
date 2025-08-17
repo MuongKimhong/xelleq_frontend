@@ -284,6 +284,8 @@ async function joinCall() {
   joiningCall.value = true
 
   try {
+    await voiceCallStore.cleanUpChannel()
+
     let res = await api.post('/voicecall/join-voice-call', {
       server_id: serverData.value.id,
       room_id: openingRoom.value.id,

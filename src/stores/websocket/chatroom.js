@@ -120,8 +120,8 @@ export const useChatWS = defineStore('chatWS', () => {
         break
 
       case "UpdateMessage":
-        if (messages.value.length > 0 && openingRoomId.value) {
-          if (openingRoomId.value === data["room_id"]) {
+        if (messages.value.length > 0 && openingRoom.value) {
+          if (openingRoom.value.id === data["room_id"]) {
             let index = messages.value.findIndex((m) => m.id === data["message_id"])
 
             if (index !== -1) {
@@ -132,7 +132,7 @@ export const useChatWS = defineStore('chatWS', () => {
         break
 
       case "MarkMessagesAsSeen":
-        if (openingRoomId.value === data["room_id"]) {
+        if (openingRoom.value?.id === data["room_id"]) {
           const idsToMark = new Set(data["msg_ids_to_be_marked_as_seen"]);
           messages.value = messages.value.map(msg => {
             if (idsToMark.has(msg.id)) {

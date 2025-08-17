@@ -82,9 +82,7 @@ export const useUserWS = defineStore('userWSStore', () => {
         }
 
         if (openingRoom.value?.id === rooms.value[index].id) {
-          console.log("before", openingRoom.value)
           openingRoom.value.users_in_voice_call = rooms.value[index].users_in_voice_call
-          console.log("after", openingRoom.value)
         }
       }
     }
