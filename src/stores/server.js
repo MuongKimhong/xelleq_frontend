@@ -106,12 +106,14 @@ export const useViewingServerStore = defineStore(
     const viewingServer = ref({
       id: '',
       public: false,
+      slug: ""
     })
 
     function setViewingServer(server) {
       viewingServer.value = {
         id: server.id,
         public: server.public,
+        slug: server.slug
       }
     }
 
@@ -119,6 +121,7 @@ export const useViewingServerStore = defineStore(
       viewingServer.value = {
         id: '',
         public: false,
+        slug: ""
       }
     }
     return { viewingServer, setViewingServer, clearViewingServer }
