@@ -70,7 +70,7 @@
 }
 .message-reply-to-wrapper {
     cursor: pointer;
-    border-left: 4px solid black
+    border-left: 4px solid rgba(0, 0, 0, 0.6)
 }
 .options-btn {
   position: absolute;
@@ -89,7 +89,7 @@
     border-radius: 50%;
 }
 .other-msg {
-    background-color: rgba(100, 116, 139, 0.9);
+    background-color: rgba(100, 116, 139, 0.7);
     color: white;
     align-self: flex-start;
 }

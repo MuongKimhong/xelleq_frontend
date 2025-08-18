@@ -483,15 +483,7 @@ async function leaveCall() {
                     :reply-to-msg="message.reply_to_message"
                     @scroll-to-message="handleScrollToMessage"
                   />
-                  <div
-                    v-if="message.is_voice_calling"
-                    class="mb-1"
-                    style="display: flex; align-items: center"
-                  >
-                    <span style="font-weight: bold">{{ message.text }}</span>
-                    <n-icon class="ml-2"><PhoneAlt /></n-icon>
-                  </div>
-                  <span v-else class="mb-1">{{ message.text }}</span>
+                  <span class="mb-1">{{ message.text }}</span>
                   <MessageFileList :message="message" />
 
                   <div style="text-align: right; display: flex; justify-content: flex-end">
@@ -545,15 +537,7 @@ async function leaveCall() {
                   :reply-to-msg="message.reply_to_message"
                   @scroll-to-message="handleScrollToMessage"
                 />
-                <div
-                  v-if="message.is_voice_calling"
-                  class="mb-1"
-                  style="display: flex; align-items: center; cursor: pointer"
-                >
-                  <span style="font-weight: bold">{{ message.text }}</span>
-                  <n-icon class="ml-2"><PhoneAlt /></n-icon>
-                </div>
-                <span v-else class="mb-1">{{ message.text }}</span>
+                <span class="mb-1">{{ message.text }}</span>
                 <MessageFileList :message="message" />
 
                 <div style="text-align: right">
