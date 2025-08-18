@@ -13,17 +13,6 @@ export const useBaseStore = defineStore('base', () => {
   const viewingImages = ref([])
   const showViewingModal = ref(false)
 
-  // cache views to be used in App.vue.
-  // empty this list if user logged out or is not authenticated
-  // otherwise set to ['home', 'search-view']
-  const cachedViews = computed(() => {
-    if (user.value.authenticated) {
-      return ['home', 'search-view']
-    }
-
-    return []
-  })
-
   function setCurrentUrl(url) {
     currentUrl.value = url
   }
@@ -37,7 +26,6 @@ export const useBaseStore = defineStore('base', () => {
     setCurrentUrl,
     clearCurrentUrl,
     viewingImages,
-    showViewingModal,
-    cachedViews
+    showViewingModal
   }
 })

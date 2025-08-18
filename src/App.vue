@@ -4,10 +4,10 @@ import { NConfigProvider, NMessageProvider, NLayout, NLayoutContent } from 'naiv
 import { useRoute } from 'vue-router'
 import { useBreakpoint } from './breakpoint'
 import { useThemeStore } from './stores/theme'
-import { useBaseStore } from './stores/base.js'
+import { useUserStore } from './stores/user.js'
 import { useLangStore } from './stores/lang'
 import { storeToRefs } from 'pinia'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 import Navbar from './components/navbar/Navbar.vue'
 import Sider from './components/Sider.vue'
@@ -17,7 +17,23 @@ const route = useRoute()
 const themeStore = useThemeStore()
 const { theme } = storeToRefs(themeStore)
 
-const { cachedViews } = useBaseStore()
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
+
+const cachedViews = ref(['home', 'search-view']) // name of component,  not route
+
+if (!user.value.authenticated) {
+  cachedViews.value = []
+}
+
+watch(
+  () => user.value.authenticated,
+  (newFlag) => {
+    if (newFlag) {
+      cachedViews.value = ['home', 'search-view']
+    }
+  },
+)
 
 const langStore = useLangStore()
 const naiveLang = computed(() => langStore.naiveUIlang)

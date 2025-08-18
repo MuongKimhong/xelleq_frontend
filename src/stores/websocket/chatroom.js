@@ -81,7 +81,7 @@ export const useChatWS = defineStore('chatWS', () => {
       case "NewMessage":
         let newMsgRoomId = data["room_id"]
 
-        if ((openingRoom.value.id !== newMsgRoomId) || !openingRoom.value)
+        if ((openingRoom.value?.id !== newMsgRoomId) || !openingRoom.value)
         {
           let index = rooms.value.findIndex((r) => r.id === newMsgRoomId)
 

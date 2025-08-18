@@ -201,7 +201,7 @@ function redirectProfile(ownerUsername) {
       </div>
     </div>
 
-    <p class="comment-body">
+    <p class="r-comment-body">
       <span
         style="color: #2080f0; cursor: pointer"
         v-if="rComment.reply_to_user_id !== rComment.owner_id"

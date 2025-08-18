@@ -83,6 +83,16 @@ export const useUserWS = defineStore('userWSStore', () => {
 
         if (openingRoom.value?.id === rooms.value[index].id) {
           openingRoom.value.users_in_voice_call = rooms.value[index].users_in_voice_call
+
+          let users = openingRoom.value.users_in_voice_call
+
+          if (
+            flag &&
+            users.includes(user.value.username) &&
+            (wsData['joiner_uid'] !== user.value.username)
+          ) {
+              document.getElementById("joined-alert-audio").play();
+          }
         }
       }
     }
