@@ -1,25 +1,35 @@
 <script setup>
-import { NInputGroup, NInput, NSwitch, NCard, NButton, NPopover, useMessage } from 'naive-ui'
-import { useUserStore } from '../../stores/user.js'
-import { useBreakpoint } from '../../breakpoint.js'
+import { NInputGroup, NInput, NSwitch, NCard, NButton, NSelect, useMessage } from 'naive-ui'
+import { useUserStore } from '@/stores/user.js'
+import { useAudioDeviceStore, useVoiceCallStore } from '@/stores/chat.js'
+import { useBreakpoint } from '@/breakpoint.js'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { ref, watch, onMounted } from 'vue'
-import api from '../../axios.js'
+import api from '@/axios.js'
+import AgoraRTC from 'agora-rtc-sdk-ng'
 
 // local components
-import EmailVerify from '../../components/account_settings/EmailVerify.vue'
-import UpdateProfilePhoto from '../../components/account_settings/UpdateProfilePhoto.vue'
-import ChangePassword from '../../components/account_settings/ChangePassword.vue'
+import EmailVerify from '@/components/account_settings/EmailVerify.vue'
+import UpdateProfilePhoto from '@/components/account_settings/UpdateProfilePhoto.vue'
+import ChangePassword from '@/components/account_settings/ChangePassword.vue'
 
-import '../../assets/styles/loginRegister.css'
-import '../../assets/base.css'
+import '@/assets/styles/loginRegister.css'
+import '@/assets/base.css'
 
 const { isBreakPointSmOrXs, isBreakPointMdAndUp, isBreakPointSmAndUp } = useBreakpoint()
 const { t } = useI18n()
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+
+const audioDeviceStore = useAudioDeviceStore()
+const { selectedMicrophone } = storeToRefs(audioDeviceStore)
+
+const voiceCallStore = useVoiceCallStore()
+const { localAudioTrack } = storeToRefs(voiceCallStore)
+
+const availableMicrophones = ref([])
 
 const message = useMessage()
 const router = useRouter()
@@ -172,6 +182,31 @@ async function toggleReceiveEmailNotification() {
     return
   }
 }
+
+function onMicrophoneChange(newDeviceId) {
+  if (localAudioTrack.value) {
+    localAudioTrack.value.setDevice(newDeviceId)
+  }
+}
+
+onMounted(async () => {
+  let microphones = await AgoraRTC.getMicrophones()
+
+  availableMicrophones.value.length = 0
+
+  for (let microphone of microphones) {
+    if (microphone.kind === 'audioinput') {
+      availableMicrophones.value.push({
+        label: microphone.label,
+        value: microphone.deviceId,
+      })
+
+      if (!selectedMicrophone.value) {
+        selectedMicrophone.value = microphone.deviceId
+      }
+    }
+  }
+})
 </script>
 
 <template>
@@ -265,6 +300,17 @@ async function toggleReceiveEmailNotification() {
         <span class="info-title">{{ t('changePassword') }}</span>
         <hr class="underline" />
         <ChangePassword />
+      </div>
+
+      <div class="mt-4">
+        <span class="info-title">Microphones</span>
+        <hr class="underline" />
+
+        <n-select
+          v-model:value="selectedMicrophone"
+          :options="availableMicrophones"
+          @update:value="onMicrophoneChange"
+        ></n-select>
       </div>
     </n-card>
   </div>

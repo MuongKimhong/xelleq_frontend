@@ -1,5 +1,5 @@
 import { ref, markRaw } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import AgoraRTC from 'agora-rtc-sdk-ng'
 
 export const useChatStore = defineStore('chatStore', () => {
@@ -14,12 +14,25 @@ export const useChatStore = defineStore('chatStore', () => {
   }
 })
 
+export const useAudioDeviceStore = defineStore("audioDeviceStore", () => {
+  const selectedMicrophone = ref(null) // deviceId
+
+  return {
+    selectedMicrophone
+  }
+},{
+  persist: true
+})
+
 export const useVoiceCallStore = defineStore('voiceCallStore', () => {
   const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
   // const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
   const agoraClient = ref(null)
   const localAudioTrack = ref(null)
   const userUserUIDS = ref([])
+
+  const audioDeviceStore = useAudioDeviceStore()
+  const { selectedMicrophone } = storeToRefs(audioDeviceStore)
 
   function setClient() {
     // vue reactivity interfer with agora object,
@@ -30,6 +43,10 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
   async function setLocalAudio() {
     try {
       localAudioTrack.value = markRaw(await AgoraRTC.createMicrophoneAudioTrack())
+
+      if (selectedMicrophone.value) {
+        localAudioTrack.value.setDevice(selectedMicrophone.value)
+      }
     } catch (e) {
       throw e
     }
@@ -94,6 +111,7 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
     setLocalAudio,
     publishLocalAudio,
     setupCallProcess,
-    userUserUIDS
+    userUserUIDS,
+    localAudioTrack
   }
 })
