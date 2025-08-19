@@ -51,7 +51,7 @@ const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
 const chatStore = useChatStore()
-const { openingRoom, messages } = storeToRefs(chatStore)
+const { openingRoom, messages, pinnedMessage } = storeToRefs(chatStore)
 
 const voiceCallStore = useVoiceCallStore()
 const { agoraClient, ownMicrophoneMuted } = storeToRefs(voiceCallStore)
@@ -115,6 +115,25 @@ async function getMessages(roomId, switchTab) {
   loading.value = false
 }
 
+async function getPinnedMessage(roomId) {
+  try {
+    let res = await api.get('/message/get-pinned-message', {
+      params: {
+        room_id: roomId,
+        server_id: serverData.value.id,
+      },
+    })
+
+    if (res.status === 200) {
+      if (res.data['pinned_msg'] === '') {
+        pinnedMessage.value = null
+      } else {
+        pinnedMessage.value = res.data['pinned_msg']
+      }
+    }
+  } catch (_) {}
+}
+
 function jumpToButtom() {
   if (messageArea.value) {
     messageArea.value.scrollTop = 0
@@ -176,6 +195,7 @@ watch(
       removeScrollListener()
       changingRoom.value = true
       await getMessages(newOpeningRoomId, true)
+      getPinnedMessage(newOpeningRoomId)
       changingRoom.value = false
       addScrollListener()
     }
@@ -328,6 +348,37 @@ async function leaveCall() {
 
   leavingCall.value = false
 }
+
+const pinning = ref(false)
+
+async function pinMessage() {
+  if (!serverData.value || !openingRoom.value || !msgObjectPopover.value || !msgIndexPopover.value)
+    return
+
+  pinning.value = true
+
+  try {
+    let res = await api.put('/message/pin-unpin-message', {
+      server_id: serverData.value.id,
+      room_id: openingRoom.value.id,
+      message_id: msgObjectPopover.value.id,
+    })
+
+    if (res.status === 200) {
+      if (messages.value.length > 0) {
+        messages.value[msgIndexPopover.value].pinned = res.data['pinned']
+
+        if (res.data['pinned']) {
+          pinnedMessage.value = msgObjectPopover.value
+        } else {
+          pinnedMessage.value = null
+        }
+      }
+    }
+  } catch (_) {}
+
+  pinning.value = false
+}
 </script>
 
 <template>
@@ -463,6 +514,24 @@ async function leaveCall() {
       <div class="my-1">
         <n-button size="small" tertiary style="width: 100%" @click="onReplyToMessage()">
           Reply
+        </n-button>
+      </div>
+      <div v-if="(serverData.isAdmin || serverData.isModerator) && msgObjectPopover" class="my-1">
+        <n-button
+          size="small"
+          tertiary
+          style="width: 100%"
+          :loading="pinning"
+          :disabled="pinning"
+          @click="pinMessage()"
+        >
+          <span
+            v-if="
+              pinnedMessage && msgObjectPopover.pinned && msgObjectPopover.id === pinnedMessage.id
+            "
+            >Unpin</span
+          >
+          <span v-else>Pin</span>
         </n-button>
       </div>
       <!-- <div class="mt-2">

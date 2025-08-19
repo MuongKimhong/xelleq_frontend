@@ -6,11 +6,13 @@ export const useChatStore = defineStore('chatStore', () => {
   const openingRoom = ref(null)
   const rooms = ref([])
   const messages = ref([])
+  const pinnedMessage = ref(null)
 
   return {
     openingRoom,
     rooms,
-    messages
+    messages,
+    pinnedMessage
   }
 })
 

@@ -14,7 +14,7 @@ export const useChatWS = defineStore('chatWS', () => {
   const { user }  = storeToRefs(userStore)
 
   const chatStore = useChatStore()
-  const { openingRoom, rooms, messages } = storeToRefs(chatStore)
+  const { openingRoom, rooms, messages, pinnedMessage } = storeToRefs(chatStore)
 
   const chatWS = ref(null)
 
@@ -143,6 +143,17 @@ export const useChatWS = defineStore('chatWS', () => {
             }
             return msg;
           });
+        }
+        break
+
+      case "PinnedMessageUpdate":
+        if (openingRoom.value?.id === data['room_id']) {
+
+          if (data['pinned_msg'] === '') {
+            pinnedMessage.value = null
+          } else {
+            pinnedMessage.value = data['pinned_msg']
+          }
         }
         break
     }

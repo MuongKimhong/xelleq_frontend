@@ -10,6 +10,7 @@ import {
   MicrophoneAlt,
   MicrophoneAltSlash,
 } from '@vicons/fa'
+import { PushpinOutlined } from '@vicons/antd'
 import { useChatStore } from '@/stores/chat.js'
 import { useServerStore } from '@/stores/server.js'
 import { storeToRefs } from 'pinia'
@@ -33,7 +34,7 @@ const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
 
 const chatStore = useChatStore()
-const { openingRoom } = storeToRefs(chatStore)
+const { openingRoom, pinnedMessage } = storeToRefs(chatStore)
 
 const naiveUIMessage = useMessage()
 const message = ref('')
@@ -316,7 +317,22 @@ async function onEnterPress(e) {
       </div>
     </div>
 
-    <div v-if="replyToMsg !== null" class="mb-2">
+    <div
+      v-if="pinnedMessage"
+      class="mb-2 p-2"
+      style="background-color: rgba(128, 128, 128, 0.2); border-radius: 5px"
+    >
+      <div>
+        <n-button size="tiny" type="primary" disabled round>
+          <template #icon>
+            <n-icon><PushpinOutlined /></n-icon>
+          </template>
+        </n-button>
+      </div>
+      <div class="mt-1 text-truncate">{{ pinnedMessage.text }}</div>
+    </div>
+
+    <div v-if="replyToMsg !== null" class="mb-2 p-2">
       <div>
         <n-button size="tiny" round class="mr-2" @click="emit('close-reply-to')">X</n-button>
         <span>
