@@ -25,12 +25,14 @@ export const useAudioDeviceStore = defineStore("audioDeviceStore", () => {
 })
 
 export const useVoiceCallStore = defineStore('voiceCallStore', () => {
-  // const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
-  const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
+  const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
+  // const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
   const agoraClient = ref(null)
   const localAudioTrack = ref(null)
   const userUserUIDS = ref([])
   const ownMicrophoneMuted = ref(false)
+  const remoteAudioTracks = ref(new Map())
+  const remoteMutedAudioTracks = ref(new Map())
 
   const audioDeviceStore = useAudioDeviceStore()
   const { selectedMicrophone } = storeToRefs(audioDeviceStore)
@@ -71,6 +73,7 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
     }
     agoraClient.value = null
     localAudioTrack.value = null
+    remoteAudioTracks.value.clear()
   }
 
   async function publishLocalAudio() {
@@ -85,17 +88,33 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
     try {
       agoraClient.value.on('user-published', async (user, mediaType) => {
         await agoraClient.value.subscribe(user, mediaType)
-        if (mediaType === 'audio') user.audioTrack.play()
+        if (mediaType === 'audio') {
+          const remoteAudioTrack = user.audioTrack;
+
+          if (remoteAudioTrack) {
+            remoteAudioTrack.play();
+            remoteAudioTracks.value.set(user.uid, remoteAudioTrack);
+          }
+        }
       })
 
       agoraClient.value.on('user-unpublished', (user, mediaType) => {
-        if (mediaType === 'audio') user.audioTrack.stop()
+        remoteAudioTracks.value.delete(user.uid);
+        if (mediaType === 'audio') {
+          const remoteAudioTrack = user.audioTrack;
+
+          if (remoteAudioTrack) {
+            remoteAudioTrack.stop();
+          }
+        }
       })
 
       agoraClient.value.on('user-left', (user) => {
-        if (user.audioTrack) {
-          user.audioTrack.stop()
-          user.audioTrack.removeAllListeners()
+        remoteAudioTracks.value.delete(user.uid);
+        const remoteAudioTrack = user.audioTrack;
+
+        if (remoteAudioTrack) {
+          remoteAudioTrack.stop();
         }
       })
 
@@ -107,10 +126,41 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
   }
 
   // true is mute
-  function muteOrUnmuteOwnMicrophone(flag) {
+  async function muteOrUnmuteOwnMicrophone(flag) {
     if (localAudioTrack.value) {
       localAudioTrack.value.setEnabled(!flag)
+
+      try {
+        if (flag) {
+          await agoraClient.unpublish(localAudioTrack.value);
+        } else {
+          await agoraClient.publish(localAudioTrack.value);
+        }
+      }
+      catch (_) {}
+
       ownMicrophoneMuted.value = flag
+    }
+  }
+
+  function muteOrUnmuteRemoteMicrophone(flag, userUID) {
+    if (flag) {
+      let userAudioTrack = remoteAudioTracks.value.get(userUID)
+
+      if (userAudioTrack) {
+        userAudioTrack.stop()
+        remoteMutedAudioTracks.value.set(userUID, userAudioTrack)
+        remoteAudioTracks.value.delete(userUID)
+      }
+    }
+    else {
+      let userMutedAudioTrack = remoteMutedAudioTracks.value.get(userUID)
+
+      if (userMutedAudioTrack) {
+        userMutedAudioTrack.play()
+        remoteAudioTracks.value.set(userUID, userMutedAudioTrack)
+        remoteMutedAudioTracks.value.delete(userUID)
+      }
     }
   }
 
@@ -125,6 +175,9 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
     userUserUIDS,
     localAudioTrack,
     ownMicrophoneMuted,
-    muteOrUnmuteOwnMicrophone
+    muteOrUnmuteOwnMicrophone,
+    muteOrUnmuteRemoteMicrophone,
+    remoteAudioTracks,
+    remoteMutedAudioTracks
   }
 })

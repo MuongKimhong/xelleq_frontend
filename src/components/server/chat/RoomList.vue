@@ -1,10 +1,11 @@
 <script setup>
 import { NTag, NSpin, NPopover, NButton, NIcon } from 'naive-ui'
 import { DotsVertical } from '@vicons/tabler'
-import { Speaker220Regular } from '@vicons/fluent'
+import { Speaker220Regular, SpeakerOff24Regular } from '@vicons/fluent'
 import { Plus } from '@vicons/fa'
-import { useChatStore } from '@/stores/chat.js'
+import { useChatStore, useVoiceCallStore } from '@/stores/chat.js'
 import { useServerStore } from '@/stores/server.js'
+import { useUserStore } from '@/stores/user.js'
 import { useBreakpoint } from '@/breakpoint.js'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
@@ -25,11 +26,17 @@ const emit = defineEmits(['romm-press-md-and-down'])
 const { isBreakPointLgAndUp, isBreakPointMdAndDown } = useBreakpoint()
 const { t } = useI18n()
 
+const userStore = useUserStore()
+const { user } = storeToRefs(userStore)
+
 const serverStore = useServerStore()
 const { serverData } = storeToRefs(serverStore)
 
 const chatStore = useChatStore()
 const { openingRoom, rooms } = storeToRefs(chatStore)
+
+const voiceCallStore = useVoiceCallStore()
+const { remoteAudioTracks, ownMicrophoneMuted } = storeToRefs(voiceCallStore)
 
 const showCreateRoomModal = ref(false)
 const showRenameRoomModal = ref(false)
@@ -187,6 +194,7 @@ onMounted(async () => {
                 'room-name-lg-and-up': isBreakPointLgAndUp,
                 'room-name-md-and-down': isBreakPointMdAndDown,
               }"
+              class="room-name"
             >
               <span> # {{ room.name }} </span>
             </div>
@@ -218,7 +226,11 @@ onMounted(async () => {
           </div>
 
           <!-- list of user in call -->
-          <div style="padding-left: 10px" class="mt-1" v-if="room.users_in_voice_call.length > 0">
+          <div
+            style="padding-left: 10px"
+            class="mt-1"
+            v-if="room.users_in_voice_call.length > 0 && remoteAudioTracks"
+          >
             <div
               v-for="userInCall in room.users_in_voice_call"
               :key="userInCall"
@@ -227,8 +239,31 @@ onMounted(async () => {
                 'user-incall-name-md-and-down': isBreakPointMdAndDown,
               }"
             >
-              <n-icon :size="15"><Speaker220Regular /> </n-icon>
-              <span class="ml-1"> {{ userInCall }} </span>
+              <div v-if="userInCall === user.username" style="display: flex; align-items: center">
+                <n-icon v-if="!ownMicrophoneMuted" :size="15" class="speaker-icon">
+                  <Speaker220Regular />
+                </n-icon>
+                <n-icon v-else :size="15" class="speaker-icon"><SpeakerOff24Regular /> </n-icon>
+                <span class="ml-1"> {{ userInCall }} </span>
+              </div>
+              <div v-else style="display: flex; align-items: center">
+                <n-icon
+                  v-if="remoteAudioTracks.has(userInCall)"
+                  :size="15"
+                  class="speaker-icon"
+                  @click="voiceCallStore.muteOrUnmuteRemoteMicrophone(true, userInCall)"
+                >
+                  <Speaker220Regular />
+                </n-icon>
+                <n-icon
+                  v-else
+                  :size="15"
+                  class="speaker-icon"
+                  @click="voiceCallStore.muteOrUnmuteRemoteMicrophone(false, userInCall)"
+                  ><SpeakerOff24Regular />
+                </n-icon>
+                <span class="ml-1"> {{ userInCall }} </span>
+              </div>
             </div>
           </div>
         </div>

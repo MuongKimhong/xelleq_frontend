@@ -127,12 +127,18 @@
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 4px;
-  cursor: pointer;
 }
 .room:hover {
   background-color: rgba(32, 128, 240, 0.15);
   border-radius: 4px;
 }
+.room-name {
+    cursor: pointer;
+}
+.speaker-icon {
+    cursor: pointer;
+}
+
 .room-name-lg-and-up {
     white-space: nowrap;
     overflow: hidden;
