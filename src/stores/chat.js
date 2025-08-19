@@ -18,18 +18,19 @@ export const useAudioDeviceStore = defineStore("audioDeviceStore", () => {
   const selectedMicrophone = ref(null) // deviceId
 
   return {
-    selectedMicrophone
+    selectedMicrophone,
   }
 },{
   persist: true
 })
 
 export const useVoiceCallStore = defineStore('voiceCallStore', () => {
-  const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
-  // const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
+  // const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
+  const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
   const agoraClient = ref(null)
   const localAudioTrack = ref(null)
   const userUserUIDS = ref([])
+  const ownMicrophoneMuted = ref(false)
 
   const audioDeviceStore = useAudioDeviceStore()
   const { selectedMicrophone } = storeToRefs(audioDeviceStore)
@@ -47,6 +48,8 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
       if (selectedMicrophone.value) {
         localAudioTrack.value.setDevice(selectedMicrophone.value)
       }
+
+      localAudioTrack.value.setEnabled(!ownMicrophoneMuted.value)
     } catch (e) {
       throw e
     }
@@ -103,6 +106,14 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
     }
   }
 
+  // true is mute
+  function muteOrUnmuteOwnMicrophone(flag) {
+    if (localAudioTrack.value) {
+      localAudioTrack.value.setEnabled(!flag)
+      ownMicrophoneMuted.value = flag
+    }
+  }
+
   return {
     appId,
     agoraClient,
@@ -112,6 +123,8 @@ export const useVoiceCallStore = defineStore('voiceCallStore', () => {
     publishLocalAudio,
     setupCallProcess,
     userUserUIDS,
-    localAudioTrack
+    localAudioTrack,
+    ownMicrophoneMuted,
+    muteOrUnmuteOwnMicrophone
   }
 })

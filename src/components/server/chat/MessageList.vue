@@ -1,6 +1,6 @@
 <script setup>
 import { NSpin, NTag, NPopover, NButton, NIcon, NImage } from 'naive-ui'
-import { UserCircleRegular, PhoneAlt } from '@vicons/fa'
+import { UserCircleRegular, PhoneAlt, MicrophoneAlt, MicrophoneAltSlash } from '@vicons/fa'
 import { CheckmarkDone } from '@vicons/ionicons5'
 import { IosArrowDown } from '@vicons/ionicons4'
 import { ArrowBackIosRound } from '@vicons/material'
@@ -54,7 +54,7 @@ const chatStore = useChatStore()
 const { openingRoom, messages } = storeToRefs(chatStore)
 
 const voiceCallStore = useVoiceCallStore()
-const { agoraClient } = storeToRefs(voiceCallStore)
+const { agoraClient, ownMicrophoneMuted } = storeToRefs(voiceCallStore)
 
 const loading = ref(false)
 const loadErr = ref(false)
@@ -365,20 +365,44 @@ async function leaveCall() {
           </template>
           Join
         </n-button>
-        <n-button
-          v-else-if="openingRoom.users_in_voice_call.includes(user.username)"
-          type="error"
-          size="tiny"
-          round
-          :disabled="leavingCall"
-          :loading="leavingCall"
-          @click="leaveCall()"
-        >
-          <template #icon>
-            <n-icon><PhoneAlt /></n-icon>
-          </template>
-          Leave
-        </n-button>
+
+        <div v-else-if="openingRoom.users_in_voice_call.includes(user.username)">
+          <n-button
+            v-if="ownMicrophoneMuted"
+            size="tiny"
+            round
+            class="mr-2"
+            @click="voiceCallStore.muteOrUnmuteOwnMicrophone(false)"
+          >
+            <template #icon>
+              <n-icon><MicrophoneAltSlash /></n-icon>
+            </template>
+          </n-button>
+          <n-button
+            v-else
+            size="tiny"
+            round
+            class="mr-2"
+            @click="voiceCallStore.muteOrUnmuteOwnMicrophone(true)"
+          >
+            <template #icon>
+              <n-icon><MicrophoneAlt /></n-icon>
+            </template>
+          </n-button>
+          <n-button
+            type="error"
+            size="tiny"
+            round
+            :disabled="leavingCall"
+            :loading="leavingCall"
+            @click="leaveCall()"
+          >
+            <template #icon>
+              <n-icon><PhoneAlt /></n-icon>
+            </template>
+            Leave
+          </n-button>
+        </div>
       </div>
     </div>
 
