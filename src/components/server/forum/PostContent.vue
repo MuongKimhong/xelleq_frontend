@@ -328,7 +328,7 @@ function onEditPostBtnPress() {
     </div>
 
     <div style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px">
-      <div>
+      <div style="margin: 0">
         <h2 v-if="useFor !== 'post-detail-page'" style="margin: 0">
           <span @click="viewPost()" style="cursor: pointer; font-weight: bold">
             {{ postData.title }}
@@ -337,14 +337,16 @@ function onEditPostBtnPress() {
         <h2 v-else style="font-weight: bold; margin: 0">{{ postData.title }}</h2>
       </div>
 
-      <div>
-        <p v-if="useFor !== 'post-detail-page'" class="text-truncate">
-          <span @click="viewPost()" style="cursor: pointer">{{ postData.plain_text_content }}</span>
-        </p>
-        <div v-else class="html-content" v-html="postData.html_content"></div>
+      <!-- <div style="margin: 0; background-color: red"> -->
+      <div v-if="useFor !== 'post-detail-page'" class="text-truncate py-1">
+        <span @click="viewPost()" style="cursor: pointer; font-size: 16px">{{
+          postData.plain_text_content
+        }}</span>
       </div>
+      <div v-else class="html-content" v-html="postData.html_content"></div>
+      <!-- </div> -->
 
-      <div style="cursor: pointer">
+      <div style="cursor: pointer" class="mt-2">
         <PostCarousel :medias="postData.medias" :full-screen="false" />
       </div>
 
