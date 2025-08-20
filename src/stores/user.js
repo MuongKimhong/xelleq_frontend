@@ -15,6 +15,9 @@ export const useUserStore = defineStore('user', () => {
     receiveEmailNotification: false,
     public: false,
     maxForumPostGalleryCount: 0,
+    withGoogle: false,
+    withFacebook: false,
+    withGithub: false
   })
 
   function setUser(userData) {
@@ -30,6 +33,9 @@ export const useUserStore = defineStore('user', () => {
       receiveEmailNotification: userData.receive_email_notification,
       public: userData.public,
       maxForumPostGalleryCount: userData.max_forum_post_gallery_count,
+      withGoogle: userData.with_google,
+      withFacebook: userData.with_facebook,
+      withGithub: userData.with_github
     }
   }
 
@@ -46,6 +52,9 @@ export const useUserStore = defineStore('user', () => {
       receiveEmailNotification: false,
       public: false,
       maxForumPostGalleryCount: 0,
+      withGoogle: false,
+      withFacebook: false,
+      withGithub: false
     }
   }
 

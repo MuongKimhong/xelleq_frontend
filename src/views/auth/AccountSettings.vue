@@ -296,7 +296,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div class="mt-4">
+      <div v-if="!user.withGoogle && !user.withFacebook && !user.withGithub" class="mt-4">
         <span class="info-title">{{ t('changePassword') }}</span>
         <hr class="underline" />
         <ChangePassword />

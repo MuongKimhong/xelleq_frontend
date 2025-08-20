@@ -144,16 +144,64 @@ async function register() {
       default:
         errText.value = t('registerErr')
     }
-
     showErrText.value = true
-    isSubmitting.value = false
-    return
   }
+  isSubmitting.value = false
+}
+
+const googleBtn = ref(null)
+
+async function handleGoogleCredentialResponse(response) {
+  isSubmitting.value = true
+  showErrText.value = false
+  errText.value = ''
+
+  try {
+    let res = await api.post('/users/signin-with-google', {
+      id_token: response.credential,
+    })
+
+    if (res.status === 200) {
+      try {
+        await getUserData()
+
+        // redirect to set url
+        if (currentUrl.value !== null) {
+          let url = currentUrl.value
+          baseStore.clearCurrentUrl()
+          window.location.href = url
+          return
+        }
+
+        router.push({ name: 'home' })
+      } catch (_) {
+        router.push({ name: 'login' })
+      }
+    }
+  } catch (_) {
+    errText.value = 'Something went wrong, please try again.'
+    showErrText.value = true
+  }
+
+  isSubmitting.value = false
 }
 
 // on enter key press
 const handleEnter = (e) => e.key === 'Enter' && register()
-onMounted(() => window.addEventListener('keydown', handleEnter))
+
+onMounted(() => {
+  window.addEventListener('keydown', handleEnter)
+
+  window.google.accounts.id.initialize({
+    client_id: '36909106385-3rcspt9lh9jtml83b10cbvfv2onqluh6.apps.googleusercontent.com',
+    callback: handleGoogleCredentialResponse,
+  })
+
+  window.google.accounts.id.renderButton(
+    googleBtn.value,
+    { theme: 'outline', size: 'large', text: 'continue_with' }, // button style
+  )
+})
 onUnmounted(() => window.removeEventListener('keydown', handleEnter))
 </script>
 
@@ -167,7 +215,15 @@ onUnmounted(() => window.removeEventListener('keydown', handleEnter))
           <n-tag type="error" size="large">{{ errText }}</n-tag>
         </div>
       </transition>
+
       <div>
+        <!-- Container for the Google button -->
+        <div ref="googleBtn"></div>
+
+        <div class="input" style="text-align: center">
+          <span>or</span>
+        </div>
+
         <div class="input">
           <n-input
             type="text"
