@@ -40,7 +40,7 @@ const props = defineProps({
   },
   index: {
     type: Number,
-    required: true,
+    required: false,
   },
   useFor: {
     // "forum-tab", "post-detail-page" or "new-feed"

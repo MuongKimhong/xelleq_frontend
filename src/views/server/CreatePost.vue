@@ -19,6 +19,7 @@ import { ArrowLeft, ArrowRight } from '@vicons/fa'
 import { useCreatePostStore } from '@/stores/forum.js'
 import { useUserStore } from '@/stores/user.js'
 import { useServerStore } from '@/stores/server.js'
+import { useNewFeedStore } from '@/stores/newfeed.js'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -36,6 +37,9 @@ const router = useRouter()
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
+
+const newFeedStore = useNewFeedStore()
+const { newFeedPosts } = storeToRefs(newFeedStore)
 
 const createPostStore = useCreatePostStore()
 const {
@@ -197,6 +201,7 @@ async function createPost() {
     if (res.status === 200) {
       showSuccess.value = true
       newPost.value = res.data['new_post']
+      newFeedPosts.value.unshift(res.data['new_post'])
       postApprovedByAdmin.value = res.data['approved_by_server_admin_or_mod']
     }
   } catch (e) {

@@ -214,7 +214,6 @@ onBeforeUnmount(() => {
 }
 .new-feed-content-container {
   height: calc(100dvh - 60px);
-  scroll-behavior: smooth;
   will-change: transform;
   flex: 1;
   overflow-y: auto;

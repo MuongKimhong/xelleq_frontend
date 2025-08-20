@@ -70,10 +70,10 @@ async function deletePost() {
           newFeedPosts.value.splice(deletePostModalRef.value.index, 1)
           break
       }
+      forumStore.resetDeletePostModalRef()
     }
   } catch (_) {}
   deleting.value = false
-  forumStore.resetDeletePostModalRef()
 }
 
 function cancel() {
