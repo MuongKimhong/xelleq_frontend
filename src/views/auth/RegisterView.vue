@@ -1,5 +1,6 @@
 <script setup>
 import { NCard, NInput, NInputGroup, NButton, NIcon, NTag, NCheckbox, NDatePicker } from 'naive-ui'
+import { Google } from '@vicons/fa'
 import { EyeOffOutline, EyeOutline } from '@vicons/ionicons5'
 import { useBaseStore } from '@/stores/base.js'
 import { useLangStore } from '@/stores/lang.js'
@@ -197,12 +198,20 @@ onMounted(() => {
     callback: handleGoogleCredentialResponse,
   })
 
-  window.google.accounts.id.renderButton(
-    googleBtn.value,
-    { theme: 'outline', size: 'large', text: 'continue_with' }, // button style
-  )
+  window.google.accounts.id.renderButton(googleBtn.value, {
+    theme: 'outline',
+    size: 'large',
+    text: 'continue_with',
+  })
 })
 onUnmounted(() => window.removeEventListener('keydown', handleEnter))
+
+function onCustomGoogleButtonPress() {
+  if (googleBtn.value) {
+    let googleLoginWrapperButton = googleBtn.value.querySelector('div[role=button]')
+    googleLoginWrapperButton.click()
+  }
+}
 </script>
 
 <template>
@@ -217,8 +226,16 @@ onUnmounted(() => window.removeEventListener('keydown', handleEnter))
       </transition>
 
       <div>
-        <!-- Container for the Google button -->
-        <div ref="googleBtn" style="width: 100%"></div>
+        <div ref="googleBtn" style="visibility: hidden; position: absolute; z-index: -2"></div>
+
+        <div class="input">
+          <n-button style="width: 100%" @click="onCustomGoogleButtonPress">
+            <template #icon>
+              <n-icon><Google /></n-icon>
+            </template>
+            Continue with Google
+          </n-button>
+        </div>
 
         <div class="input" style="text-align: center">
           <span>or</span>
