@@ -218,7 +218,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleEnter))
 
       <div>
         <!-- Container for the Google button -->
-        <div ref="googleBtn"></div>
+        <div ref="googleBtn" style="width: 100%"></div>
 
         <div class="input" style="text-align: center">
           <span>or</span>
