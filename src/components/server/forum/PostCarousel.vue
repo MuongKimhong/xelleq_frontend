@@ -32,8 +32,7 @@ function viewMedia() {
   <div>
     <n-carousel
       :show-arrow="medias.length > 1"
-      class="pb-2 pt-2"
-      style="touch-action: pan-y"
+      class="pb-2"
       :touchable="false"
       :loop="false"
       @click="viewMedia()"
@@ -43,8 +42,7 @@ function viewMedia() {
         :key="media.id"
         :class="{
           'media-wrapper-sm-and-xs': isBreakPointSmOrXs,
-          'media-wrapper': isBreakPointMdAndUp && !fullScreen,
-          'media-wrapper-fullscreen': fullScreen,
+          'media-wrapper': isBreakPointMdAndUp,
         }"
         class="media"
       >
@@ -152,19 +150,6 @@ function viewMedia() {
   position: relative;
   width: 100%;
   height: 550px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  border-radius: 5px;
-  margin-bottom: 20px;
-}
-
-.media-wrapper-fullscreen {
-  position: relative;
-  width: 100%;
-  height: 85vh;
   overflow: hidden;
   display: flex;
   justify-content: center;
