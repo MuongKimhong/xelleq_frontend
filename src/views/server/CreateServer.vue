@@ -283,7 +283,7 @@ onMounted(() => getAllTopics())
   padding-left: 10px;
   padding-right: 10px;
   height: 100%;
-  max-width: 500px;
+  max-width: 850px;
 }
 .info-row {
   display: flex;

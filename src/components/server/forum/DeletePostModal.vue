@@ -38,7 +38,20 @@ async function deletePost() {
     if (res.status === 200) {
       switch (deletePostModalRef.value.callFrom) {
         case 'post-detail-page':
+          let deletedPostId = deletePostModalRef.value.id
           forumStore.resetDeletePostModalRef()
+
+          let forumTabPostIndex = posts.value.findIndex((p) => p.id === deletedPostId)
+          let newFeedPostIndex = newFeedPosts.value.findIndex((p) => p.id === deletedPostId)
+
+          if (forumTabPostIndex !== -1) {
+            posts.value.splice(forumTabPostIndex, 1)
+          }
+          if (newFeedPostIndex !== -1) {
+            newFeedPosts.value.splice(newFeedPostIndex, 1)
+          }
+
+          deleting.value = false
           router.push({ name: 'home' })
           return
         case 'forum-tab':
@@ -57,11 +70,10 @@ async function deletePost() {
           newFeedPosts.value.splice(deletePostModalRef.value.index, 1)
           break
       }
-      forumStore.resetDeletePostModalRef()
     }
   } catch (_) {}
-
   deleting.value = false
+  forumStore.resetDeletePostModalRef()
 }
 
 function cancel() {

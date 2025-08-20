@@ -282,8 +282,8 @@ onBeforeUnmount(() => {
           show-count
           placeholder="Title"
           :autosize="{
-            minRows: 1,
-            maxRows: 5,
+            minRows: 2,
+            maxRows: 6,
           }"
         />
 
@@ -505,7 +505,7 @@ onBeforeUnmount(() => {
   will-change: transform;*/
   margin-left: auto;
   margin-right: auto;
-  max-width: 500px;
+  max-width: 850px;
 }
 .wrapper {
   padding: 10px;
