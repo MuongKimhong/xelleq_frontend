@@ -136,6 +136,11 @@ onMounted(() => {
     googleBtn.value,
     { theme: 'outline', size: 'large', text: 'continue_with' }, // button style
   )
+
+  const btn = document.querySelector('#googleBtn > div')
+  if (btn) {
+    btn.style.width = '100%'
+  }
 })
 
 onUnmounted(() => window.removeEventListener('keydown', handleEnter))
@@ -152,7 +157,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleEnter))
         </div>
       </transition>
       <div>
-        <div ref="googleBtn" style="width: 100%"></div>
+        <div id="googleBtn" ref="googleBtn" style="width: 100%"></div>
 
         <div class="input" style="text-align: center">
           <span>or</span>
