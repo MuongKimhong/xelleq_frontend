@@ -85,6 +85,7 @@ onMounted(async () => {
       name: 'server-detail',
       params: {
         id: viewingServer.value.id,
+        slug: viewingServer.value.slug,
       },
     })
   }
