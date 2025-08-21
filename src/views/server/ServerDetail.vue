@@ -113,10 +113,7 @@ async function getServerData() {
       serverStore.setServerData(res.data)
 
       if (viewingServer.value.id.trim() === '') {
-        viewingServerStore.setViewingServer({
-          id: res.data.id,
-          public: res.data.public,
-        })
+        viewingServerStore.setViewingServer(res.data)
       }
 
       if (needToJoinServerId.value !== null) {
