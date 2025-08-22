@@ -64,6 +64,7 @@ async function logout() {
 }
 
 function viewProfile() {
+  viewingServerStore.clearViewingServer()
   router.push({
     name: 'user-profile',
     params: {
@@ -73,6 +74,7 @@ function viewProfile() {
 }
 
 function redirectCreatePost() {
+  viewingServerStore.clearViewingServer()
   router.push({ name: 'create-post' })
 }
 </script>

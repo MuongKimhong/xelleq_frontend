@@ -7,7 +7,7 @@ import { useBreakpoint } from '@/breakpoint.js'
 import { useNotificationStore } from '@/stores/notification.js'
 import { useUserStore } from '@/stores/user.js'
 import { useSiderStore } from '@/stores/sider.js'
-import { useServerStore } from '@/stores/server.js'
+import { useServerStore, useViewingServerStore } from '@/stores/server.js'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { defineAsyncComponent, watch, onMounted } from 'vue'
@@ -35,19 +35,24 @@ const { collapsed } = storeToRefs(siderStore)
 const notificationStore = useNotificationStore()
 const { newNotificationCount } = storeToRefs(notificationStore)
 
+const viewingServerStore = useViewingServerStore()
+
 const serverStore = useServerStore()
 
 const router = useRouter()
 
 function redirectLogIn() {
+  viewingServerStore.clearViewingServer()
   router.push({ name: 'login' })
 }
 
 function redirectHome() {
+  viewingServerStore.clearViewingServer()
   router.push({ name: 'home' })
 }
 
 function redirectCreatePost() {
+  viewingServerStore.clearViewingServer()
   router.push({ name: 'create-post' })
 }
 
