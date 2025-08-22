@@ -6,7 +6,6 @@ import { ArrowForward, LogOutOutline } from '@vicons/ionicons5'
 import { UserCircleRegular, Plus } from '@vicons/fa'
 import { useRouter } from 'vue-router'
 import { useThemeStore } from '@/stores/theme.js'
-import { useViewingServerStore } from '@/stores/server.js'
 import { useUserStore } from '@/stores/user.js'
 import { useLangStore } from '@/stores/lang.js'
 import { useBreakpoint } from '@/breakpoint.js'
@@ -25,8 +24,6 @@ const themeStore = useThemeStore()
 const { theme } = storeToRefs(themeStore)
 
 const { t } = useI18n()
-
-const viewingServerStore = useViewingServerStore()
 
 const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
@@ -52,7 +49,6 @@ watch(switchOnKhmerLang, (newVal) => {
 // logout
 async function logout() {
   isLoggingOut.value = true
-  viewingServerStore.clearViewingServer()
   userStore.clearUser()
 
   // ok or error, refresh page anyway
@@ -64,7 +60,6 @@ async function logout() {
 }
 
 function viewProfile() {
-  viewingServerStore.clearViewingServer()
   router.push({
     name: 'user-profile',
     params: {
@@ -74,7 +69,6 @@ function viewProfile() {
 }
 
 function redirectCreatePost() {
-  viewingServerStore.clearViewingServer()
   router.push({ name: 'create-post' })
 }
 </script>

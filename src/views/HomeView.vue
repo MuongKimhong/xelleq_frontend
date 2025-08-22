@@ -80,15 +80,15 @@ function handleGetMorePostsOnScroll() {
 }
 
 onMounted(async () => {
-  if (viewingServer.value.id.trim() !== '') {
-    router.push({
-      name: 'server-detail',
-      params: {
-        id: viewingServer.value.id,
-        slug: viewingServer.value.slug,
-      },
-    })
-  }
+  // if (viewingServer.value.id.trim() !== '') {
+  //   router.push({
+  //     name: 'server-detail',
+  //     params: {
+  //       id: viewingServer.value.id,
+  //       slug: viewingServer.value.slug,
+  //     },
+  //   })
+  // }
 
   await getNewFeedPosts()
 })

@@ -5,6 +5,7 @@ import { useServerStore, useViewingServerStore } from '@/stores/server.js'
 import { useBreakpoint } from '@/breakpoint.js'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 
 import '@/assets/styles/sider.css'
 import '@/assets/base.css'
@@ -18,6 +19,7 @@ const serverStore = useServerStore()
 const { joinedServers } = storeToRefs(serverStore)
 
 const viewingServerStore = useViewingServerStore()
+const { viewingServer } = storeToRefs(viewingServerStore)
 
 function redirectServerDetail(server) {
   viewingServerStore.setViewingServer(server)
@@ -32,6 +34,18 @@ function redirectServerDetail(server) {
     siderStore.toggleSider()
   }
 }
+
+onMounted(() => {
+  if (viewingServer.value.id.trim() !== '') {
+    router.push({
+      name: 'server-detail',
+      params: {
+        id: viewingServer.value.id,
+        slug: viewingServer.value.slug,
+      },
+    })
+  }
+})
 </script>
 
 <template>

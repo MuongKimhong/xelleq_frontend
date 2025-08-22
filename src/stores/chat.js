@@ -27,8 +27,7 @@ export const useAudioDeviceStore = defineStore("audioDeviceStore", () => {
 })
 
 export const useVoiceCallStore = defineStore('voiceCallStore', () => {
-  const appId = "f0ec4f9c13a14238b9a912b79cc406ba"
-  // const appId = "bb7651659ff940dd99e3e5fa5a41fa1e"
+  const appId = import.meta.env.VITE_AGORA_APP_ID
   const agoraClient = ref(null)
   const localAudioTrack = ref(null)
   const userUserUIDS = ref([])

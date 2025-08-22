@@ -184,7 +184,7 @@ router.beforeEach(async (to, _) => {
     return { name: 'login' }
   }
 
-  if (user.value.authenticated && to.name !== 'server-detail') {
+  if (to.name !== 'server-detail') {
     viewingServerStore.clearViewingServer()
   }
 })
