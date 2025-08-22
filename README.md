@@ -1,6 +1,8 @@
-## Xelleq
+## Xelleq, Create, Connect & Share, all in one place
 
-### Create, Connect & Share, all in one place.
+<p align="center">
+  <img width="200" src="public/celliq_logo.png">
+</p>
 
 > [!WARNING]
 > Xelleq is in early stage of development, ny pull requests are welcomed.
