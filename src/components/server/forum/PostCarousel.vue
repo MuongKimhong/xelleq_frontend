@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from '@vicons/fa'
 import { useBreakpoint } from '@/breakpoint.js'
 import { useBaseStore } from '@/stores/base.js'
 import { storeToRefs } from 'pinia'
+import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 
 const { isBreakPointSmOrXs, isBreakPointMdAndUp } = useBreakpoint()
 
@@ -26,64 +27,138 @@ function viewMedia() {
     }
   }
 }
+
+const videoEl = ref(null)
+const observer = ref(null)
+
+watch(
+  () => props.medias,
+  async (newValue) => {
+    if (newValue.length > 0) {
+      if (newValue[0].media_type !== 'video') {
+        return
+      }
+
+      await nextTick()
+
+      if (!videoEl.value) return
+
+      await nextTick()
+
+      if (observer.value) {
+        observer.value.disconnect()
+        observer.value = null
+      }
+
+      observer.value = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              videoEl.value.play().catch((_) => {})
+            } else {
+              videoEl.value.pause()
+            }
+          })
+        },
+        { threshold: 0.7 },
+      )
+
+      observer.value.observe(videoEl.value)
+    }
+  },
+)
+
+onMounted(() => {
+  if (!videoEl.value) return
+
+  observer.value = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          videoEl.value.play().catch((_) => {})
+        } else {
+          videoEl.value.pause()
+        }
+      })
+    },
+    { threshold: 0.7 },
+  )
+
+  observer.value.observe(videoEl.value)
+})
+
+onBeforeUnmount(() => {
+  if (observer.value) {
+    observer.value.disconnect()
+    observer.value = null
+  }
+})
 </script>
 
 <template>
-  <div>
-    <n-carousel
-      :show-arrow="medias.length > 1"
-      class="pb-2"
-      :touchable="false"
-      :loop="false"
-      @click="viewMedia()"
+  <div v-if="medias.length > 0">
+    <div
+      v-if="medias[0].media_type === 'video'"
+      :class="{
+        'media-wrapper-sm-and-xs': isBreakPointSmOrXs,
+        'media-wrapper': isBreakPointMdAndUp,
+      }"
+      class="media"
     >
-      <div
-        v-for="(media, mediaIndex) in medias"
-        :key="media.id"
-        :class="{
-          'media-wrapper-sm-and-xs': isBreakPointSmOrXs,
-          'media-wrapper': isBreakPointMdAndUp,
-        }"
-        class="media"
+      <video
+        ref="videoEl"
+        class="media-foreground"
+        controls
+        muted
+        playsinline
+        preload="metadata"
+        :src="medias[0].url"
+      ></video>
+    </div>
+
+    <div v-else>
+      <n-carousel
+        :show-arrow="medias.length > 1"
+        class="pb-2"
+        :touchable="false"
+        :loop="false"
+        @click="viewMedia()"
       >
-        <div class="media-blur-bg">
-          <img :src="media.url" loading="lazy" alt="" class="blur-img" />
+        <div
+          v-for="(media, mediaIndex) in medias"
+          :key="media.id"
+          :class="{
+            'media-wrapper-sm-and-xs': isBreakPointSmOrXs,
+            'media-wrapper': isBreakPointMdAndUp,
+          }"
+          class="media"
+        >
+          <div class="media-blur-bg">
+            <img :src="media.url" loading="lazy" alt="" class="blur-img" />
+          </div>
+          <img class="media-foreground" :src="media.url" alt="Post Image" loading="lazy" />
         </div>
-        <img
-          v-if="media.media_type == 'image'"
-          class="media-foreground"
-          :src="media.url"
-          alt="Post Image"
-          loading="lazy"
-        />
-        <video
-          v-else-if="media.media_type == 'video'"
-          class="media-foreground"
-          controls
-          preload="metadata"
-          :src="media.url"
-        ></video>
-      </div>
-      <template #arrow="{ prev, next }">
-        <div class="custom-arrow">
-          <button type="button" class="custom-arrow--left" @click.stop="prev">
-            <n-icon><ArrowLeft /></n-icon>
-          </button>
-          <button type="button" class="custom-arrow--right" @click.stop="next">
-            <n-icon><ArrowRight /></n-icon>
-          </button>
-        </div>
-      </template>
-      <template #dots="{ total, currentIndex, to }">
-        <ul class="custom-dots">
-          <li
-            v-for="index of total"
-            :key="index"
-            :class="{ ['is-active']: currentIndex === index - 1 }"
-          />
-        </ul>
-      </template>
-    </n-carousel>
+        <template #arrow="{ prev, next }">
+          <div class="custom-arrow">
+            <button type="button" class="custom-arrow--left" @click.stop="prev">
+              <n-icon><ArrowLeft /></n-icon>
+            </button>
+            <button type="button" class="custom-arrow--right" @click.stop="next">
+              <n-icon><ArrowRight /></n-icon>
+            </button>
+          </div>
+        </template>
+        <template #dots="{ total, currentIndex, to }">
+          <ul class="custom-dots">
+            <li
+              v-for="index of total"
+              :key="index"
+              :class="{ ['is-active']: currentIndex === index - 1 }"
+            />
+          </ul>
+        </template>
+      </n-carousel>
+    </div>
   </div>
 </template>
 
