@@ -1,35 +1,17 @@
-# celliq_frontend_dev
+## Xelleq, Create, Connect & Share, all in one place
 
-This template should help get you started developing with Vue 3 in Vite.
+<p align="center">
+  <img width="200" src="public/celliq_logo.png">
+</p>
 
-## Recommended IDE Setup
+> [!WARNING]
+> Xelleq is in early stage of development, ny pull requests are welcomed.
+> 
+> Feel free to open any encountered issues.
+>
+> You can also join [xelleq official server](https://xelleq.com/server/xelleq-officialpyymi/a1159d27-4325-474b-9ea9-8334c7195761?tab=description) to
+> report any problems or request any new features.
+>
+> Your input will improve [Xelleq](https://xelleq.com/).
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
+Happy coding!
