@@ -158,7 +158,7 @@ function redirectCreatePost() {
           style="width: 100%"
           quaternary
           type="primary"
-          @click="openStaticLink('aboutus-en/')"
+          @click="openStaticLink('')"
         >
           About Xelleq
         </n-button>
