@@ -5,7 +5,7 @@
 </p>
 
 > [!WARNING]
-> Xelleq is in early stage of development, ny pull requests are welcomed.
+> Xelleq is in early stage of development, any pull requests are welcomed.
 > 
 > Feel free to open any encountered issues.
 >
