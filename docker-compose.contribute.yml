@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  backend:
+    image: enginecompr3ssor/xelleq-dev:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/celliq_db
+      REDIS_URL: redis://:myredisstrongpasshehe@redis:6379
+      API_PORT: 8000
+      API_IP_ADDRESS: 0.0.0.0
+      CLIENT_DOMAIN: http://localhost:5173
+      ALLOW_ORIGIN: http://localhost:5173
+      SECRET_KEY: dev_secret
+      SMTP_FROM: random
+      MODE: dev
+      USE_CACHE: "true"
+      PUBLIC_FILE_STORAGE_DOMAIN: http://localhost:8000/uploads
+      PRIVATE_FILE_STORAGE_DOMAIN: http://localhost:8000/uploads
+      MAILGUN_API_KEY: random
+      AGORA_APP_ID: random
+      AGORA_APP_CERTIFICATE: random
+      GOOGLE_CLIENT_ID: random
+    volumes:
+      - ./uploads:/app/uploads
+
+  db:
+    image: enginecompr3ssor/dumb-db:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: celliq_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    command: [
+      "redis-server",
+      "--requirepass", "myredisstrongpasshehe",
+      "--save", "60", "10000",
+      "--save", "300", "10",
+      "--appendonly", "yes",
+      "--appendfsync", "everysec"
+    ]
+    volumes:
+      - redis_data:/data
+
+volumes:
+  pgdata:
+  redis_data:
