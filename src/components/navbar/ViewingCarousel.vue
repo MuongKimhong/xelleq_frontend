@@ -2,16 +2,11 @@
 import { NModal, NCard, NCarousel, NButton, NIcon } from 'naive-ui'
 import { ArrowLeft, ArrowRight } from '@vicons/fa'
 import { Close } from '@vicons/ionicons5'
-import { useBaseStore } from '../../stores/base.js'
+import { useBaseStore } from '@/stores/base.js'
 import { storeToRefs } from 'pinia'
-import { computed } from 'vue'
-
-// import PostCarousel from '../server/forum/PostCarousel.vue'
 
 const baseStore = useBaseStore()
 const { viewingImages, showViewingModal } = storeToRefs(baseStore)
-
-const title = computed(() => `Total ${viewingImages.value.length}`)
 
 function closeModal() {
   showViewingModal.value = false
@@ -19,7 +14,12 @@ function closeModal() {
 </script>
 
 <template>
-  <n-modal v-model:show="showViewingModal" :auto-focus="false" :mask-closable="false">
+  <n-modal
+    v-model:show="showViewingModal"
+    :auto-focus="false"
+    :mask-closable="false"
+    data-test="viewing-carousel-modal"
+  >
     <n-card
       :content-style="{ padding: '0' }"
       style="height: 100dvh; background-color: rgba(128, 128, 128, 0.8); position: relative"
@@ -51,14 +51,8 @@ function closeModal() {
             :src="media.url"
             alt="Post Image"
             loading="lazy"
+            data-test="carousel-image"
           />
-          <video
-            v-else-if="media.media_type == 'video'"
-            class="media-foreground"
-            controls
-            preload="metadata"
-            :src="media.url"
-          ></video>
         </div>
         <template #arrow="{ prev, next }">
           <div class="custom-arrow">
@@ -163,7 +157,7 @@ function closeModal() {
   position: relative;
   z-index: 2;
   max-width: 100%;
-  max-height: 100%;
+  max-height: 100vh;
   object-fit: contain;
   border-radius: 2px;
 }

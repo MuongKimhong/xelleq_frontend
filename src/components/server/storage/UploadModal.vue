@@ -66,7 +66,7 @@ async function uploadFile(selectedFile) {
   formData.append('file_name', selectedFile.name)
 
   try {
-    let res = await api.post('/servers/upload-file-to-server-chunk', formData, {
+    let res = await api.post('/servers/upload-file-to-server', formData, {
       onUploadProgress: (progressEvent) => {
         selectedFile.percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
       },
