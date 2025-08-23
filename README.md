@@ -14,4 +14,8 @@
 >
 > - Your input will improve [Xelleq](https://xelleq.com/).
 
+## Contributing
+See [contribute](https://github.com/MuongKimhong/xelleq_frontend/blob/master/CONTRIBUTING.md) for more info.
+
+## Made with Love
 Happy coding!
