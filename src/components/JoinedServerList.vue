@@ -1,5 +1,6 @@
 <script setup>
-import { NImage, NTag } from 'naive-ui'
+import { NImage, NTag, NIcon } from 'naive-ui'
+import { Speaker220Regular } from '@vicons/fluent'
 import { useSiderStore } from '@/stores/sider.js'
 import { useServerStore, useViewingServerStore } from '@/stores/server.js'
 import { useBreakpoint } from '@/breakpoint.js'
@@ -16,7 +17,7 @@ const { isBreakPointSmOrXs } = useBreakpoint()
 const siderStore = useSiderStore()
 
 const serverStore = useServerStore()
-const { joinedServers } = storeToRefs(serverStore)
+const { joinedServers, onCallServerId } = storeToRefs(serverStore)
 
 const viewingServerStore = useViewingServerStore()
 const { viewingServer } = storeToRefs(viewingServerStore)
@@ -56,6 +57,9 @@ onMounted(() => {
         :class="{ viewing: server.id === viewingServerStore.viewingServer.id }"
         @click="redirectServerDetail(server)"
       >
+        <n-icon :size="20" v-if="onCallServerId === server.id">
+          <Speaker220Regular />
+        </n-icon>
         <n-image
           v-if="server.profile_url !== null"
           :src="server.profile_url"

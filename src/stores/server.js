@@ -5,6 +5,7 @@ import api from '../axios.js'
 export const useServerStore = defineStore('server', () => {
   const joinedServers = ref([])
   const serverData = ref(null)
+  const onCallServerId = ref(null)
 
   // init call in Navbar onMounted
   async function getJoinedServers() {
@@ -87,6 +88,7 @@ export const useServerStore = defineStore('server', () => {
 
   return {
     joinedServers,
+    onCallServerId,
     getJoinedServers,
     addJoinedServer,
     serverData,

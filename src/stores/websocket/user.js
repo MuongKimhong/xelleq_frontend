@@ -7,7 +7,7 @@ import { useRoute } from "vue-router"
 import { useNotificationStore } from '@/stores/notification.js'
 import { useUserStore } from "../user.js"
 import { useServerStore } from '../server.js'
-import { useChatStore, useVoiceCallStore } from "../chat.js"
+import { useChatStore } from "../chat.js"
 import api from "@/axios.js"
 
 export const useUserWS = defineStore('userWSStore', () => {
@@ -15,7 +15,7 @@ export const useUserWS = defineStore('userWSStore', () => {
   const interval = ref(null)
 
   const serverStore = useServerStore()
-  const { serverData, joinedServers } = storeToRefs(serverStore)
+  const { onCallServerId } = storeToRefs(serverStore)
 
   const userStore = useUserStore()
   const { user }  = storeToRefs(userStore)
@@ -25,8 +25,6 @@ export const useUserWS = defineStore('userWSStore', () => {
 
   const notificationStore = useNotificationStore()
   const { notifications, newNotificationCount } = storeToRefs(notificationStore)
-
-  const voiceCallStore = useVoiceCallStore()
 
   const userWS = ref(null)
 
@@ -72,10 +70,19 @@ export const useUserWS = defineStore('userWSStore', () => {
       if (index !== -1) {
         if (flag) {
           rooms.value[index].users_in_voice_call.push(wsData['joiner_uid'])
+
+          if (wsData['joiner_uid'] === user.value.username) {
+            onCallServerId.value = rooms.value[index].server_id
+          }
+
         } else {
           for (let i = 0; i < rooms.value[index].users_in_voice_call.length; i++) {
             if (rooms.value[index].users_in_voice_call[i] === wsData['leaver_uid']) {
               rooms.value[index].users_in_voice_call.splice(i, 1)
+
+              if (wsData['leaver_uid'] === user.value.username) {
+                onCallServerId.value = null
+              }
               break
             }
           }
