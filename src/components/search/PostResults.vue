@@ -169,6 +169,14 @@ function redirectPostDetail(post, serverId) {
       </template>
     </DynamicScroller>
 
+    <div 
+      v-if="!fetchingMore && posts.length === 0" 
+      style="text-align: center"
+      class="mt-4"
+    >
+      <span>Sorry, we don't have what you're looking for.</span>
+    </div>
+
     <div v-if="fetchingMore" style="text-align: center">
       <n-spin :size="30" class="mt-4"></n-spin>
     </div>
