@@ -267,7 +267,7 @@ async function saveApprovalStatus() {
 
 <template>
   <div
-    v-if="serverData.isAdmin"
+    v-if="serverData.isAdmin || serverData.isModerator"
     id="server-settings-container"
     class="mt-2 tab-content settings-tab-container"
   >

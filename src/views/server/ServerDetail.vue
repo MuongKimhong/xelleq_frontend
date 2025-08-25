@@ -305,7 +305,7 @@ onBeforeUnmount(() => {
           <n-tab v-if="serverData.isAdmin || serverData.isModerator" name="post-approval">
             Post Approval
           </n-tab>
-          <n-tab v-if="serverData.isAdmin" name="setting">Settings</n-tab>
+          <n-tab v-if="serverData.isAdmin || serverData.isModerator" name="setting">Settings</n-tab>
           <n-tab v-if="serverData.rules && (serverData.isMember || serverData.public)" name="rule">
             Rule
           </n-tab>
