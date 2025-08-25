@@ -121,6 +121,10 @@ function redirectServer(server) {
       </template>
     </DynamicScroller>
 
+    <div v-if="!fetchingMore && servers.length === 0" style="text-align: center">
+      <span>Sorry, we don't have what you're looking for.</span>
+    </div>
+
     <div v-if="fetchingMore" style="text-align: center">
       <n-spin :size="30" class="mt-4"></n-spin>
     </div>
