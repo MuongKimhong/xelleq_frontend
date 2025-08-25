@@ -72,6 +72,9 @@ onMounted(() => {
         <span>
           {{ server.name }}
         </span>
+        <n-tag v-if="server.has_msg_to_be_seen" type="error" size="small" class="mr-1" round>
+          new
+        </n-tag>
       </div>
     </div>
     <div v-if="joinedServers.length === 0" style="text-align: center" class="mt-4">

@@ -30,7 +30,7 @@ const userStore = useUserStore()
 const { user } = storeToRefs(userStore)
 
 const serverStore = useServerStore()
-const { serverData } = storeToRefs(serverStore)
+const { serverData, joinedServers } = storeToRefs(serverStore)
 
 const chatStore = useChatStore()
 const { openingRoom, rooms } = storeToRefs(chatStore)
@@ -116,6 +116,14 @@ function onRoomPress(room, roomIndex) {
 
   if (rooms.value.length > 0) {
     rooms.value[roomIndex]['has_msg_to_be_seen'] = false
+
+    let serverIndex = joinedServers.value.findIndex(
+      (j) => j.id === rooms.value[roomIndex].server_id,
+    )
+
+    if (serverIndex !== -1) {
+      joinedServers.value[serverIndex]['has_msg_to_be_seen'] = false
+    }
   }
 
   if (isBreakPointMdAndDown.value) {
@@ -199,8 +207,10 @@ onMounted(async () => {
               <span> # {{ room.name }} </span>
             </div>
 
-            <div v-if="room.has_msg_to_be_seen">
-              <n-tag type="error" size="small" class="mr-1" round>new</n-tag>
+            <div>
+              <n-tag v-if="room.has_msg_to_be_seen" type="error" size="small" class="mr-1" round>
+                new
+              </n-tag>
 
               <n-popover
                 v-if="serverData.isAdmin || serverData.isModerator"

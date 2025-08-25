@@ -8,7 +8,7 @@ import api from "@/axios.js"
 export const useChatWS = defineStore('chatWS', () => {
   const interval = ref(null)
   const serverStore = useServerStore()
-  const { serverData } = storeToRefs(serverStore)
+  const { serverData, joinedServers } = storeToRefs(serverStore)
 
   const userStore = useUserStore()
   const { user }  = storeToRefs(userStore)
@@ -87,6 +87,12 @@ export const useChatWS = defineStore('chatWS', () => {
 
           if (index !== -1) {
             rooms.value[index]['has_msg_to_be_seen'] = true
+
+            let serverIndex = joinedServers.value.findIndex((j) => j.id === rooms.value[index].server_id)
+
+            if (serverIndex !== -1) {
+              joinedServers.value[serverIndex]['has_msg_to_be_seen'] = true
+            }
           }
         }
 
